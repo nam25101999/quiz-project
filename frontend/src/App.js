@@ -1,25 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React from 'react';
+import QuestionForm from './components/QuestionForm';
+import QuestionList from './components/QuestionList';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Reactjjjjjjjjjjjjjj hiểu bài chưa
-        </a>
-      </header>
+    <div>
+      <h1>Trang Quản Lý Câu Hỏi Trắc Nghiệm</h1>
+      <QuestionForm />
+      <QuestionList />
     </div>
   );
-}
+};
 
 export default App;
