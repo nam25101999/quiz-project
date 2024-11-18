@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+// backend/server.js
+const questionRoutes = require('./routes/questions');
+const answerRoutes = require('./routes/answers');
 
 const app = express();
 app.use(cors());
@@ -20,3 +23,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+
+// Sử dụng route
+app.use('/api/questions', questionRoutes);
+app.use('/api/answers', answerRoutes);
