@@ -2,83 +2,92 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const QuestionForm = () => {
+  const [title, setTitle] = useState('');
   const [questionText, setQuestionText] = useState('');
-  const [options, setOptions] = useState([{ optionText: '', isCorrect: false }]);
+  const [answers, setAnswers] = useState([{ answerText: '', isCorrect: false }]);
 
-  // Hàm để thêm option mới
-  const addOption = () => {
-    setOptions([...options, { optionText: '', isCorrect: false }]);
+  // Thêm câu trả lời mới
+  const addAnswer = () => {
+    setAnswers([...answers, { answerText: '', isCorrect: false }]);
   };
 
-  // Hàm để cập nhật giá trị option
-  const handleOptionChange = (index, event) => {
-    const newOptions = [...options];
-    newOptions[index].optionText = event.target.value;
-    setOptions(newOptions);
+  // Cập nhật câu trả lời
+  const updateAnswer = (index, value) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[index].answerText = value;
+    setAnswers(updatedAnswers);
   };
 
-  // Hàm để cập nhật giá trị đúng/sai của option
-  const handleOptionCorrectChange = (index, event) => {
-    const newOptions = [...options];
-    newOptions[index].isCorrect = event.target.checked;
-    setOptions(newOptions);
+  // Đánh dấu câu trả lời đúng
+  const toggleCorrectAnswer = (index) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[index].isCorrect = !updatedAnswers[index].isCorrect;
+    setAnswers(updatedAnswers);
   };
 
-  // Hàm gửi dữ liệu lên server
+  // Gửi câu hỏi tới backend
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const questionData = { questionText, options };
-      await axios.post('http://localhost:5000/api/questions/add', questionData);
+      await axios.post('http://localhost:5000/api/questions', {
+        title,
+        questionText,
+        answers
+      });
       alert('Câu hỏi đã được thêm thành công!');
+      setTitle('');
       setQuestionText('');
-      setOptions([{ optionText: '', isCorrect: false }]);
+      setAnswers([{ answerText: '', isCorrect: false }]);
     } catch (error) {
       console.error('Lỗi khi thêm câu hỏi:', error);
-      alert('Có lỗi xảy ra, vui lòng thử lại.');
+      alert('Đã xảy ra lỗi!');
     }
   };
 
   return (
     <div>
-      <h2>Thêm Câu Hỏi Trắc Nghiệm</h2>
+      <h2>Nhập Câu Hỏi Trắc Nghiệm</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Câu hỏi: </label>
+          <label>Tiêu đề câu hỏi</label>
           <input
             type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Câu hỏi</label>
+          <textarea
             value={questionText}
             onChange={(e) => setQuestionText(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Chọn các lựa chọn: </label>
-          {options.map((option, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                placeholder={`Lựa chọn ${index + 1}`}
-                value={option.optionText}
-                onChange={(e) => handleOptionChange(index, e)}
-                required
-              />
-              <label>
-                Đúng
-                <input
-                  type="checkbox"
-                  checked={option.isCorrect}
-                  onChange={(e) => handleOptionCorrectChange(index, e)}
-                />
-              </label>
-            </div>
-          ))}
-          <button type="button" onClick={addOption}>
-            Thêm Lựa Chọn
-          </button>
-        </div>
-        <button type="submit">Lưu Câu Hỏi</button>
+        
+        {/* Hiển thị các câu trả lời */}
+        {answers.map((answer, index) => (
+          <div key={index}>
+            <label>Đáp án {index + 1}</label>
+            <input 
+              type="text"
+              value={answer.answerText}
+              onChange={(e) => updateAnswer(index, e.target.value)}
+              required
+            />
+            <label>
+              <input 
+                type="checkbox" 
+                checked={answer.isCorrect} 
+                onChange={() => toggleCorrectAnswer(index)}
+              /> Câu trả lời đúng
+            </label>
+          </div>
+        ))}
+        
+        <button type="button" onClick={addAnswer}>Thêm câu trả lời</button>
+        <button type="submit">Lưu câu hỏi</button>
       </form>
     </div>
   );
