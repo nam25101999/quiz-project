@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const questionRoutes = require('./routes/questionRoutes'); // Đảm bảo rằng bạn import đúng
+const questionRoutes = require('./routes/questionRoutes'); 
 
 dotenv.config();
 
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.use('/api/questions', questionRoutes); // Đảm bảo bạn đã dùng đúng đường dẫn
+app.use('/api/questions', questionRoutes); 
 
 // Kết nối MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })

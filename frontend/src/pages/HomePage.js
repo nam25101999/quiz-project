@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getQuestions } from '../api';
-import QuestionList from '../components/QuestionList'; // Import QuestionList
+import QuestionList from '../components/QuestionList'; 
 
 const HomePage = () => {
   const [questions, setQuestions] = useState([]);
@@ -9,7 +9,7 @@ const HomePage = () => {
     const fetchQuestions = async () => {
       try {
         const response = await getQuestions();
-        console.log('Dữ liệu câu hỏi:', response.data); // Thêm dòng này để kiểm tra dữ liệu
+        console.log('Dữ liệu câu hỏi:', response.data); 
         setQuestions(response.data);
       } catch (error) {
         console.error('Lỗi khi lấy câu hỏi:', error);
