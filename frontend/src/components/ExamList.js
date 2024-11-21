@@ -1,6 +1,7 @@
 // src/components/ExamList.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './ExamList.css';
 
 const ExamList = () => {
   const [exams, setExams] = useState([]);
