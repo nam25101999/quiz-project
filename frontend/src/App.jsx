@@ -4,10 +4,12 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ExamList from './components/ExamList';
 import CreateExam from './components/CreateExam';
+import Header from './components/Header';
 
 const App = () => {
   return (
     <Router>
+      <Header />
       <div>
         <nav>
           <Link to="/login">Đăng nhập</Link> | <Link to="/register">Đăng ký</Link>

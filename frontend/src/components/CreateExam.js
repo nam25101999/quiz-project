@@ -1,7 +1,6 @@
 // src/components/CreateExam.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import './CreateExam.css';
 
 
 const CreateExam = () => {
