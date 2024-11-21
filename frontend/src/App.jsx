@@ -10,7 +10,7 @@ const App = () => {
     <Router>
       <div>
         <nav>
-          <Link to="/login">Login</Link> | <Link to="/register">Register</Link>
+          <Link to="/login">Đăng nhập</Link> | <Link to="/register">Đăng ký</Link>
         </nav>
         <Routes>
           <Route path="/login" element={<Login />} />
