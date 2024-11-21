@@ -1,24 +1,29 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
 const mongoose = require('mongoose');
-const questionRoutes = require('./routes/questionRoutes'); 
-
-dotenv.config();
-
 const app = express();
+const cors = require('cors');
+const examRoutes = require('./routes/examRoutes');
+const userRoutes = require('./routes/userRoutes'); 
 
-// Middleware
 app.use(express.json());
+
 app.use(cors());
 
-// Routes
-app.use('/api/questions', questionRoutes); 
+app.get('/', (req, res) => {
+  res.send('Welcome to the server!');
+});
 
 // Kết nối MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose
+  .connect('mongodb://localhost:27017/userInfo')
   .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.log(err));
+  .catch((err) => console.error(err));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Định tuyến cho API người dùng
+app.use('/api/users', userRoutes);
+
+// Định tuyến cho API bài trắc nghiệm
+app.use('/api/exams', examRoutes);
+
+const PORT = 5000;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

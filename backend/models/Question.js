@@ -1,14 +1,13 @@
+// models/Question.js
 const mongoose = require('mongoose');
-
-const answerSchema = new mongoose.Schema({
-  answerText: { type: String, required: true },
-  isCorrect: { type: Boolean, required: true },
-});
+const Answer = require('./Answer');
 
 const questionSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  questionText: { type: String, required: true },
-  answers: [answerSchema],
+  questionText: {
+    type: String,
+    required: true,
+  },
+  answers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Answer' }],  // Liên kết với các đáp án
 });
 
 module.exports = mongoose.model('Question', questionSchema);
