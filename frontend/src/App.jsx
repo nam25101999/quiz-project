@@ -6,6 +6,7 @@ import ExamList from './components/ExamList';
 import CreateExam from './components/CreateExam';
 import Header from './components/Header';
 import ExamView from './components/ExamView';
+import UpdateProfile from './components/UpdateProfile';
 
 const App = () => {
   return (
@@ -13,11 +14,13 @@ const App = () => {
       <Header />
       <div>
         <nav>
-          <Link to="/login">Đăng nhập</Link> | <Link to="/register">Đăng ký</Link>
+          <Link to="/login">Đăng nhập</Link> 
+          <Link to="/register">Đăng ký</Link>
         </nav>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/update-profile" element={<UpdateProfile />} />
         </Routes>
         <main>
           <Link to="/create">Tao Bai Tap </Link> 

@@ -1,13 +1,14 @@
 // routes/userRoutes.js
 const express = require('express');
-const { login, register } = require('../controllers/userController');
+const { login, register, updateUser } = require('../controllers/userController');
+const { protect } = require('../middleware/authMiddleware'); 
 
 const router = express.Router();
 
-// Route đăng nhập
 router.post('/login', login);
 
-// Route đăng ký
 router.post('/register', register);
+
+router.put('/update', protect, updateUser);
 
 module.exports = router;

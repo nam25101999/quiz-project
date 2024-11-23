@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';  // Import useNavigate để chuyển hướng
 import api from '../axios';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();  // Khai báo hook navigate
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -13,6 +15,9 @@ const Login = () => {
       const response = await api.post('/login', { username, password });
       setMessage(`Login successful! Token: ${response.data.token}`);
       localStorage.setItem('token', response.data.token);  // Lưu token vào localStorage
+
+      // Chuyển hướng đến trang UpdateProfile sau khi đăng nhập thành công
+      navigate('/update-profile');  // Đảm bảo rằng đường dẫn này chính xác với đường dẫn trang UpdateProfile
     } catch (error) {
       setMessage(error.response ? error.response.data.message : 'Server error');
     }
