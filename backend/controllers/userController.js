@@ -3,62 +3,87 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// Đăng ký
+const register = async (req, res) => {
+  try {
+    const { username, email, password, fullName, dob, gender } = req.body;
+
+    // Kiểm tra nếu tên người dùng đã tồn tại
+    const userExists = await User.findOne({ username });
+    if (userExists) {
+      return res.status(400).json({ message: 'Tên người dùng đã tồn tại' });
+    }
+
+    // Kiểm tra nếu email đã tồn tại
+    const emailExists = await User.findOne({ email });
+    if (emailExists) {
+      return res.status(400).json({ message: 'Email đã tồn tại' });
+    }
+
+    // Mã hóa mật khẩu
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Tạo người dùng mới
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      fullName,
+      dob,
+      gender,
+    });
+
+    // Lưu người dùng mới vào cơ sở dữ liệu
+    await newUser.save();
+
+    res.status(201).json({ message: 'Đăng ký thành công' });
+  } catch (error) {
+    console.log(error);  // Để dễ dàng xác định lỗi
+    res.status(500).json({ message: 'Lỗi máy chủ', error: error.message });
+  }
+};
+// Đăng nhập
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
-
-    // Kiểm tra xem username có tồn tại không
     const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(400).json({ message: 'User not found' });
-    }
+    if (!user) return res.status(400).json({ message: 'User not found' });
 
-    // Kiểm tra mật khẩu
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
+    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
-    // Tạo JWT token
-    const token = jwt.sign(
-      { id: user._id, username: user.username },
-      'your_secret_key',
-      { expiresIn: '1h' }
-    );
-
+    const token = jwt.sign({ id: user._id, username: user.username }, 'your_secret_key', { expiresIn: '1h' });
     res.status(200).json({ message: 'Login successful', token });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
-const register = async (req, res) => {
+// Cập nhật thông tin người dùng
+const updateUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    console.log('Received data:', req.body);  // Log dữ liệu nhận được từ frontend
+    const { fullName, email, dob, gender, password } = req.body;
+    const user = await User.findById(req.user.id); // Xác thực người dùng từ token
 
-    // Kiểm tra xem username đã tồn tại chưa
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Username already exists' });
+    if (!user) {
+      return res.status(404).json({ message: 'Người dùng không tồn tại' });
     }
 
-    // Mã hóa mật khẩu trước khi lưu vào DB
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log('Hashed password:', hashedPassword);  // Log mật khẩu đã mã hóa
+    user.fullName = fullName || user.fullName;
+    user.email = email || user.email;
+    user.dob = dob || user.dob;
+    user.gender = gender || user.gender;
 
-    const newUser = new User({
-      username,
-      password: hashedPassword,
-    });
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword; // Cập nhật mật khẩu mới
+    }
 
-    await newUser.save();
-    res.status(201).json({ message: 'User registered successfully' });
+    await user.save();
+    res.status(200).json({ message: 'Cập nhật thông tin thành công' });
   } catch (error) {
-    console.error('Error during registration:', error);  // Log lỗi chi tiết
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Lỗi máy chủ', error: error.message });
   }
 };
 
-
-module.exports = { login, register };
+module.exports = { login, register, updateUser };
