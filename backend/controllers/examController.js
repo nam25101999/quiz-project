@@ -1,4 +1,3 @@
-// controllers/examController.js
 const Exam = require('../models/Exam');
 const Question = require('../models/Question');
 const Answer = require('../models/Answer');
@@ -32,7 +31,15 @@ const createExam = async (req, res) => {
     }
 
     await newExam.save();
-    res.status(201).json({ message: 'Exam created successfully', exam: newExam });
+
+    // Tạo đường link dựa trên ID của bài kiểm tra
+    const examUrl = `http://localhost:3000/exams/${newExam._id}`;
+
+    res.status(201).json({
+      message: 'Exam created successfully',
+      exam: newExam,
+      examUrl, // Thêm đường link
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }

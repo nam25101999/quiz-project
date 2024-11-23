@@ -7,7 +7,7 @@ const questionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  answers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Answer' }],  // Liên kết với các đáp án
+  answers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Answer' }], // Liên kết với bảng Answer
 });
 
 module.exports = mongoose.model('Question', questionSchema);

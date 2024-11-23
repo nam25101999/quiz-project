@@ -8,7 +8,7 @@ const answerSchema = new mongoose.Schema({
   },
   isCorrect: {
     type: Boolean,
-    required: true, // Đánh dấu đáp án đúng hay sai
+    required: true,
   }
 });
 

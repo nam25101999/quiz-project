@@ -5,6 +5,7 @@ import Register from './components/Register';
 import ExamList from './components/ExamList';
 import CreateExam from './components/CreateExam';
 import Header from './components/Header';
+import ExamView from './components/ExamView';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Routes>
             <Route path="/create" element={<CreateExam />} />
             <Route path="/exam-list" element={<ExamList />} />
+            <Route path="/exams/:examId" element={<ExamView />} />
           </Routes>
         </main>
         

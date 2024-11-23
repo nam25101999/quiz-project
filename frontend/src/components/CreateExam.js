@@ -1,47 +1,51 @@
-// src/components/CreateExam.js
 import React, { useState } from 'react';
 import axios from 'axios';
-
 
 const CreateExam = () => {
   const [examTitle, setExamTitle] = useState('');
   const [questionText, setQuestionText] = useState('');
   const [answers, setAnswers] = useState([{ content: '', isCorrect: false }]);
   const [message, setMessage] = useState('');
+  const [examLink, setExamLink] = useState(''); // Thêm state để lưu link
 
-  // Hàm xử lý thay đổi tiêu đề bài trắc nghiệm
   const handleExamTitleChange = (e) => {
     setExamTitle(e.target.value);
   };
 
-  // Hàm xử lý thay đổi câu hỏi
   const handleQuestionTextChange = (e) => {
     setQuestionText(e.target.value);
   };
 
-  // Hàm xử lý thay đổi đáp án
   const handleAnswerChange = (index, e) => {
     const updatedAnswers = [...answers];
-    updatedAnswers[index][e.target.name] = e.target.value;
+    if (e.target.name === 'isCorrect') {
+      updatedAnswers[index][e.target.name] = e.target.checked;
+    } else {
+      updatedAnswers[index][e.target.name] = e.target.value;
+    }
     setAnswers(updatedAnswers);
   };
 
-  // Thêm một đáp án mới
   const addAnswer = () => {
     setAnswers([...answers, { content: '', isCorrect: false }]);
   };
 
-  // Xóa một đáp án
   const removeAnswer = (index) => {
-    const updatedAnswers = answers.filter((_, i) => i !== index);
-    setAnswers(updatedAnswers);
+    if (window.confirm('Bạn có chắc chắn muốn xóa đáp án này?')) {
+      const updatedAnswers = answers.filter((_, i) => i !== index);
+      setAnswers(updatedAnswers);
+    }
   };
 
-  // Hàm xử lý gửi form
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Tạo dữ liệu bài trắc nghiệm
+  
+    const validAnswers = answers.every((answer) => answer.content.trim() !== '');
+    if (!validAnswers) {
+      setMessage('Vui lòng nhập đầy đủ nội dung đáp án.');
+      return;
+    }
+  
     const examData = {
       title: examTitle,
       questions: [
@@ -54,15 +58,23 @@ const CreateExam = () => {
         },
       ],
     };
-
+  
     try {
-      // Gửi dữ liệu bài trắc nghiệm đến backend
       const response = await axios.post('http://localhost:5000/api/exams', examData);
-      setMessage(response.data.message); // Hiển thị thông báo từ server
+      console.log(response.data);  // Kiểm tra dữ liệu trả về từ API
+  
+      const examUrl = response.data.examUrl;  // Backend trả về đường dẫn bài thi
+      if (examUrl) {
+        setExamLink(examUrl);  // Lưu link vào state
+        setMessage('Bài thi đã được tạo thành công!');
+      } else {
+        setMessage('Không có đường dẫn bài thi từ backend.');
+      }
     } catch (error) {
       setMessage('Error: ' + error.message);
     }
   };
+  
 
   return (
     <div>
@@ -95,7 +107,7 @@ const CreateExam = () => {
                 name="content"
                 value={answer.content}
                 onChange={(e) => handleAnswerChange(index, e)}
-                placeholder="Answer content"
+                placeholder="Nội dung đáp án"
                 required
               />
               <label>
@@ -110,11 +122,18 @@ const CreateExam = () => {
               <button type="button" onClick={() => removeAnswer(index)}>Xóa đáp án</button>
             </div>
           ))}
-          <button type="button" onClick={addAnswer}>Thêm câu hỏi</button>
+          <button type="button" onClick={addAnswer}>Thêm đáp án</button>
         </div>
         <button type="submit">Tạo bài kiểm tra</button>
       </form>
       {message && <p>{message}</p>}
+      {examLink && (
+        <p>
+          <a href={examLink} target="_blank" rel="noopener noreferrer">
+            Nhấn vào đây để làm bài kiểm tra
+          </a>
+        </p>
+      )}
     </div>
   );
 };

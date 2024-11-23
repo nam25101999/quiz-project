@@ -6,7 +6,6 @@ const examRoutes = require('./routes/examRoutes');
 const userRoutes = require('./routes/userRoutes'); 
 
 app.use(express.json());
-
 app.use(cors());
 
 app.get('/', (req, res) => {
