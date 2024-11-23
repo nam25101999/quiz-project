@@ -21,7 +21,7 @@ const App = () => {
         </Routes>
         <main>
           <Link to="/create">Tao Bai Tap </Link> 
-          <Link to="/exam-list">Danh Sach Bai Tap </Link>
+          <Link to="/exam-list">Danh Sách Bài Tập </Link>
           <Routes>
             <Route path="/create" element={<CreateExam />} />
             <Route path="/exam-list" element={<ExamList />} />
