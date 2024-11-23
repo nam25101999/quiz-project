@@ -86,4 +86,28 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { login, register, updateUser };
+
+const getUserInfo = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(403).json({ message: 'Không có quyền truy cập' });
+    }
+
+    const decoded = jwt.verify(token, 'your_secret_key'); 
+    const user = await User.findById(decoded.id); 
+
+    if (!user) {
+      return res.status(404).json({ message: 'Không tìm thấy người dùng' });
+    }
+
+    console.log('User found:', user); 
+    res.status(200).json(user); 
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Lỗi khi lấy thông tin người dùng' });
+  }
+};
+
+
+module.exports = { login, register, updateUser, getUserInfo };

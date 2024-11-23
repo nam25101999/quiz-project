@@ -7,6 +7,7 @@ import CreateExam from './components/CreateExam';
 import Header from './components/Header';
 import ExamView from './components/ExamView';
 import UpdateProfile from './components/UpdateProfile';
+import Profile from './components/Profile';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/update-profile" element={<UpdateProfile />} />
         </Routes>
         <main>

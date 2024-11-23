@@ -14,10 +14,9 @@ const Login = () => {
     try {
       const response = await api.post('/login', { username, password });
       setMessage(`Login successful! Token: ${response.data.token}`);
-      localStorage.setItem('token', response.data.token);  // Lưu token vào localStorage
+      localStorage.setItem('token', response.data.token); 
 
-      // Chuyển hướng đến trang UpdateProfile sau khi đăng nhập thành công
-      navigate('/update-profile');  // Đảm bảo rằng đường dẫn này chính xác với đường dẫn trang UpdateProfile
+      navigate('/profile');
     } catch (error) {
       setMessage(error.response ? error.response.data.message : 'Server error');
     }
