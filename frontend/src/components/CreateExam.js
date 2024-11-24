@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const CreateExam = () => {
@@ -6,15 +7,33 @@ const CreateExam = () => {
   const [questionText, setQuestionText] = useState('');
   const [answers, setAnswers] = useState([{ content: '', isCorrect: false }]);
   const [message, setMessage] = useState('');
-  const [examLink, setExamLink] = useState(''); // Thêm state để lưu link
+  const [examLink, setExamLink] = useState('');
+  const [userExams, setUserExams] = useState([]); // Lưu thông tin bài thi của người dùng
+  const navigate = useNavigate();
 
-  const handleExamTitleChange = (e) => {
-    setExamTitle(e.target.value);
+  // Kiểm tra trạng thái đăng nhập
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login'); // Chuyển hướng nếu chưa đăng nhập
+    } else {
+      fetchUserExams(token); // Lấy danh sách bài thi của người dùng
+    }
+  }, [navigate]);
+
+  const fetchUserExams = async (token) => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/exams/user', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUserExams(response.data.exams); // Cập nhật danh sách bài thi
+    } catch (error) {
+      setMessage('Không thể tải danh sách bài thi.');
+    }
   };
 
-  const handleQuestionTextChange = (e) => {
-    setQuestionText(e.target.value);
-  };
+  const handleExamTitleChange = (e) => setExamTitle(e.target.value);
+  const handleQuestionTextChange = (e) => setQuestionText(e.target.value);
 
   const handleAnswerChange = (index, e) => {
     const updatedAnswers = [...answers];
@@ -26,10 +45,7 @@ const CreateExam = () => {
     setAnswers(updatedAnswers);
   };
 
-  const addAnswer = () => {
-    setAnswers([...answers, { content: '', isCorrect: false }]);
-  };
-
+  const addAnswer = () => setAnswers([...answers, { content: '', isCorrect: false }]);
   const removeAnswer = (index) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa đáp án này?')) {
       const updatedAnswers = answers.filter((_, i) => i !== index);
@@ -39,18 +55,17 @@ const CreateExam = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     const validAnswers = answers.every((answer) => answer.content.trim() !== '');
     if (!validAnswers) {
       setMessage('Vui lòng nhập đầy đủ nội dung đáp án.');
       return;
     }
-  
+
     const examData = {
       title: examTitle,
       questions: [
         {
-          questionText: questionText,
+          questionText,
           answers: answers.map((answer) => ({
             content: answer.content,
             isCorrect: answer.isCorrect,
@@ -58,15 +73,18 @@ const CreateExam = () => {
         },
       ],
     };
-  
+
     try {
-      const response = await axios.post('http://localhost:5000/api/exams', examData);
-      console.log(response.data);  // Kiểm tra dữ liệu trả về từ API
-  
-      const examUrl = response.data.examUrl;  // Backend trả về đường dẫn bài thi
+      const token = localStorage.getItem('token');
+      const response = await axios.post('http://localhost:5000/api/exams', examData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const examUrl = response.data.examUrl;
       if (examUrl) {
-        setExamLink(examUrl);  // Lưu link vào state
+        setExamLink(examUrl);
         setMessage('Bài thi đã được tạo thành công!');
+        fetchUserExams(token); // Cập nhật lại danh sách bài thi
       } else {
         setMessage('Không có đường dẫn bài thi từ backend.');
       }
@@ -74,7 +92,6 @@ const CreateExam = () => {
       setMessage('Error: ' + error.message);
     }
   };
-  
 
   return (
     <div>
@@ -82,21 +99,11 @@ const CreateExam = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Tiêu Đề Bài Thi</label>
-          <input
-            type="text"
-            value={examTitle}
-            onChange={handleExamTitleChange}
-            required
-          />
+          <input type="text" value={examTitle} onChange={handleExamTitleChange} required />
         </div>
         <div>
           <label>Tiêu đề câu hỏi</label>
-          <input
-            type="text"
-            value={questionText}
-            onChange={handleQuestionTextChange}
-            required
-          />
+          <input type="text" value={questionText} onChange={handleQuestionTextChange} required />
         </div>
         <div>
           <h3>Đáp án</h3>
@@ -134,6 +141,15 @@ const CreateExam = () => {
           </a>
         </p>
       )}
+      <h3>Bài thi của bạn</h3>
+      <ul>
+        {userExams.map((exam) => (
+          <li key={exam._id}>
+            {exam.title}
+            <a href={`/exam/${exam._id}`} target="_blank" rel="noopener noreferrer"> Xem bài thi</a>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

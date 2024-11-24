@@ -1,5 +1,5 @@
-// src/components/Register.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../axios';
 
 const Register = () => {
@@ -10,6 +10,15 @@ const Register = () => {
   const [dob, setDob] = useState('');
   const [gender, setGender] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate(); // Sử dụng navigate để điều hướng
+
+  // Kiểm tra trạng thái đăng nhập khi component được tải
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/profile'); // Chuyển hướng nếu đã đăng nhập
+    }
+  }, [navigate]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -24,37 +33,38 @@ const Register = () => {
 
   return (
     <div>
-      <h2>Register</h2>
+      <h2>Đăng ký</h2>
       <form onSubmit={handleRegister}>
         <div>
-          <label>Username</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <label>Tên đăng nhập</label>
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
         </div>
         <div>
           <label>Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div>
-          <label>Password</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <label>Mật khẩu</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <div>
-          <label>Full Name</label>
-          <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+          <label>Họ và tên</label>
+          <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
         </div>
         <div>
-          <label>Date of Birth</label>
-          <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
+          <label>Ngày sinh</label>
+          <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} required />
         </div>
         <div>
-          <label>Gender</label>
-          <select value={gender} onChange={(e) => setGender(e.target.value)}>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
+          <label>Giới tính</label>
+          <select value={gender} onChange={(e) => setGender(e.target.value)} required>
+            <option value="">Chọn giới tính</option>
+            <option value="Male">Nam</option>
+            <option value="Female">Nữ</option>
+            <option value="Other">Khác</option>
           </select>
         </div>
-        <button type="submit">Register</button>
+        <button type="submit">Đăng ký</button>
       </form>
       {message && <p>{message}</p>}
     </div>
