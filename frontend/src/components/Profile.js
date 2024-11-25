@@ -46,7 +46,7 @@ const Profile = () => {
       {message && <p>{message}</p>}
       {user ? (
         <div>
-          <p><strong>ID người dùng:</strong> {user._id}</p> {/* Thêm ID người dùng */}
+          <p><strong>ID người dùng:</strong> {user._id}</p>
           <p><strong>Tên người dùng:</strong> {user.username}</p>
           <p><strong>Email:</strong> {user.email}</p>
           <p><strong>Họ và tên:</strong> {user.fullName}</p>

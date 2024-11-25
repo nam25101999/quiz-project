@@ -33,12 +33,11 @@ const register = async (req, res) => {
       gender,
     });
 
-    // Lưu người dùng mới vào cơ sở dữ liệu
     await newUser.save();
 
     res.status(201).json({ message: 'Đăng ký thành công' });
   } catch (error) {
-    console.log(error);  // Để dễ dàng xác định lỗi
+    console.log(error);
     res.status(500).json({ message: 'Lỗi máy chủ', error: error.message });
   }
 };
@@ -63,7 +62,7 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { fullName, email, dob, gender, password } = req.body;
-    const user = await User.findById(req.user.id); // Xác thực người dùng từ token
+    const user = await User.findById(req.user.id);
 
     if (!user) {
       return res.status(404).json({ message: 'Người dùng không tồn tại' });
@@ -94,18 +93,25 @@ const getUserInfo = async (req, res) => {
       return res.status(403).json({ message: 'Không có quyền truy cập' });
     }
 
-    const decoded = jwt.verify(token, 'your_secret_key'); 
-    const user = await User.findById(decoded.id); 
+    let decoded;
+    try {
+      decoded = jwt.verify(token, 'your_secret_key');
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({ message: 'Token đã hết hạn, vui lòng đăng nhập lại' });
+      }
+      return res.status(403).json({ message: 'Token không hợp lệ' });
+    }
 
+    const user = await User.findById(decoded.id);
     if (!user) {
       return res.status(404).json({ message: 'Không tìm thấy người dùng' });
     }
 
-    console.log('User found:', user); 
-    res.status(200).json(user); 
+    res.status(200).json(user);
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ message: 'Lỗi khi lấy thông tin người dùng' });
+    res.status(500).json({ message: 'Lỗi khi lấy thông tin người dùng', error: error.message });
   }
 };
 
