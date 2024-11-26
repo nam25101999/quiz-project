@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors');
 const examRoutes = require('./routes/examRoutes');
 const userRoutes = require('./routes/userRoutes'); 
+const noteRoutes = require('./routes/noteRoutes');
 
 app.use(express.json());
 app.use(cors());
@@ -18,11 +19,11 @@ mongoose
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error(err));
 
-// Định tuyến cho API người dùng
 app.use('/api/users', userRoutes);
 
-// Định tuyến cho API bài trắc nghiệm
 app.use('/api/exams', examRoutes);
+
+app.use('/api', noteRoutes);
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

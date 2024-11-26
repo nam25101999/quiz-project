@@ -1,15 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const {
-  createExam,
-  getExams,
-  getExamById,
-} = require('../controllers/examController');
+const { createExam } = require('../controllers/examController');
+const  { getExams } = require('../controllers/examController');
+const { protect } = require('../middleware/authMiddleware');
 
-router.post('/', createExam);
+// Route tạo bài kiểm tra (có xác thực)
+router.post('/create', protect, createExam);
 
-router.get('/', getExams);
-
-router.get('/:id', getExamById);
+router.post('/exams', protect, getExams ) ;
 
 module.exports = router;

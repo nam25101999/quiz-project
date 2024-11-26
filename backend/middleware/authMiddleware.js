@@ -1,19 +1,25 @@
-// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 const protect = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
-    return res.status(403).json({ message: 'Token không hợp lệ' });
+    return res.status(401).json({ message: 'Token không được cung cấp' });
   }
 
   try {
-    // Giải mã token và kiểm tra tính hợp lệ
-    const decoded = jwt.verify(token, 'your_secret_key');
-    req.user = decoded;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_secret_key');
+
+    // Kiểm tra nếu decoded.id không hợp lệ
+    if (!mongoose.Types.ObjectId.isValid(decoded.id)) {
+      return res.status(400).json({ message: 'ID người dùng không hợp lệ' });
+    }
+
+    req.user = { id: decoded.id };  // Gắn thông tin người dùng vào req
     next();
   } catch (err) {
+    console.error('JWT Error:', err);
     if (err.name === 'TokenExpiredError') {
       return res.status(401).json({ message: 'Token hết hạn, vui lòng đăng nhập lại' });
     }

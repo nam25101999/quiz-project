@@ -1,155 +1,137 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Sử dụng useNavigate thay cho useHistory
 import axios from 'axios';
 
 const CreateExam = () => {
-  const [examTitle, setExamTitle] = useState('');
-  const [questionText, setQuestionText] = useState('');
-  const [answers, setAnswers] = useState([{ content: '', isCorrect: false }]);
+  const [title, setTitle] = useState('');
+  const [questions, setQuestions] = useState([
+    { questionText: '', answers: [{ text: '', isCorrect: false }] }
+  ]);
   const [message, setMessage] = useState('');
-  const [examLink, setExamLink] = useState('');
-  const [userExams, setUserExams] = useState([]); // Lưu thông tin bài thi của người dùng
-  const navigate = useNavigate();
+  const navigate = useNavigate();  // Sử dụng useNavigate
 
-  // Kiểm tra trạng thái đăng nhập
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      navigate('/login'); // Chuyển hướng nếu chưa đăng nhập
-    } else {
-      fetchUserExams(token); // Lấy danh sách bài thi của người dùng
+      navigate('/login');  // Sử dụng navigate thay vì history.push
     }
   }, [navigate]);
 
-  const fetchUserExams = async (token) => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/exams/user', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUserExams(response.data.exams); // Cập nhật danh sách bài thi
-    } catch (error) {
-      setMessage('Không thể tải danh sách bài thi.');
-    }
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
   };
 
-  const handleExamTitleChange = (e) => setExamTitle(e.target.value);
-  const handleQuestionTextChange = (e) => setQuestionText(e.target.value);
-
-  const handleAnswerChange = (index, e) => {
-    const updatedAnswers = [...answers];
-    if (e.target.name === 'isCorrect') {
-      updatedAnswers[index][e.target.name] = e.target.checked;
-    } else {
-      updatedAnswers[index][e.target.name] = e.target.value;
-    }
-    setAnswers(updatedAnswers);
+  const handleQuestionChange = (index, e) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[index].questionText = e.target.value;
+    setQuestions(updatedQuestions);
   };
 
-  const addAnswer = () => setAnswers([...answers, { content: '', isCorrect: false }]);
-  const removeAnswer = (index) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa đáp án này?')) {
-      const updatedAnswers = answers.filter((_, i) => i !== index);
-      setAnswers(updatedAnswers);
-    }
+  const handleAnswerChange = (qIndex, aIndex, e) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[qIndex].answers[aIndex].text = e.target.value;
+    setQuestions(updatedQuestions);
+  };
+
+  const handleCorrectAnswerChange = (qIndex, aIndex) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[qIndex].answers.forEach((answer, index) => {
+      answer.isCorrect = index === aIndex;
+    });
+    setQuestions(updatedQuestions);
+  };
+
+  const addQuestion = () => {
+    setQuestions([...questions, { questionText: '', answers: [{ text: '', isCorrect: false }] }]);
+  };
+
+  const addAnswer = (index) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[index].answers.push({ text: '', isCorrect: false });
+    setQuestions(updatedQuestions);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validAnswers = answers.every((answer) => answer.content.trim() !== '');
-    if (!validAnswers) {
-      setMessage('Vui lòng nhập đầy đủ nội dung đáp án.');
-      return;
-    }
-
-    const examData = {
-      title: examTitle,
-      questions: [
-        {
-          questionText,
-          answers: answers.map((answer) => ({
-            content: answer.content,
-            isCorrect: answer.isCorrect,
-          })),
-        },
-      ],
-    };
-
+    const token = localStorage.getItem('token');
+  
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/exams', examData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const examUrl = response.data.examUrl;
-      if (examUrl) {
-        setExamLink(examUrl);
-        setMessage('Bài thi đã được tạo thành công!');
-        fetchUserExams(token); // Cập nhật lại danh sách bài thi
-      } else {
-        setMessage('Không có đường dẫn bài thi từ backend.');
-      }
+      const response = await axios.post(
+        'http://localhost:5000/api/exams/create',  // Đảm bảo đường dẫn API đúng
+        { title, questions },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setMessage('Exam created successfully!');
+      setTitle('');
+      setQuestions([{ questionText: '', answers: [{ text: '', isCorrect: false }] }]);
     } catch (error) {
-      setMessage('Error: ' + error.message);
+      const errorMsg = error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+      setMessage('Error creating exam: ' + errorMsg);
     }
   };
 
   return (
     <div>
-      <h2>Tạo Bài Thi</h2>
+      <h2>Create a New Exam</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Tiêu Đề Bài Thi</label>
-          <input type="text" value={examTitle} onChange={handleExamTitleChange} required />
+          <label>Title:</label>
+          <input
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+            required
+            placeholder="Enter exam title"
+          />
         </div>
-        <div>
-          <label>Tiêu đề câu hỏi</label>
-          <input type="text" value={questionText} onChange={handleQuestionTextChange} required />
-        </div>
-        <div>
-          <h3>Đáp án</h3>
-          {answers.map((answer, index) => (
-            <div key={index}>
+        {questions.map((question, qIndex) => (
+          <div key={qIndex}>
+            <h3>Question {qIndex + 1}</h3>
+            <div>
+              <label>Question Text:</label>
               <input
                 type="text"
-                name="content"
-                value={answer.content}
-                onChange={(e) => handleAnswerChange(index, e)}
-                placeholder="Nội dung đáp án"
+                value={question.questionText}
+                onChange={(e) => handleQuestionChange(qIndex, e)}
                 required
+                placeholder="Enter question text"
               />
-              <label>
-                <input
-                  type="checkbox"
-                  name="isCorrect"
-                  checked={answer.isCorrect}
-                  onChange={(e) => handleAnswerChange(index, e)}
-                />
-                Đáp án đúng
-              </label>
-              <button type="button" onClick={() => removeAnswer(index)}>Xóa đáp án</button>
             </div>
-          ))}
-          <button type="button" onClick={addAnswer}>Thêm đáp án</button>
-        </div>
-        <button type="submit">Tạo bài kiểm tra</button>
-      </form>
-      {message && <p>{message}</p>}
-      {examLink && (
-        <p>
-          <a href={examLink} target="_blank" rel="noopener noreferrer">
-            Nhấn vào đây để làm bài kiểm tra
-          </a>
-        </p>
-      )}
-      <h3>Bài thi của bạn</h3>
-      <ul>
-        {userExams.map((exam) => (
-          <li key={exam._id}>
-            {exam.title}
-            <a href={`/exam/${exam._id}`} target="_blank" rel="noopener noreferrer"> Xem bài thi</a>
-          </li>
+            {question.answers.map((answer, aIndex) => (
+              <div key={aIndex}>
+                <label>Answer {aIndex + 1}:</label>
+                <input
+                  type="text"
+                  value={answer.text}
+                  onChange={(e) => handleAnswerChange(qIndex, aIndex, e)}
+                  required
+                  placeholder="Enter answer text"
+                />
+                <label>
+                  Correct Answer:
+                  <input
+                    type="radio"
+                    checked={answer.isCorrect}
+                    onChange={() => handleCorrectAnswerChange(qIndex, aIndex)}
+                  />
+                </label>
+              </div>
+            ))}
+            <button type="button" onClick={() => addAnswer(qIndex)}>Add Answer</button>
+          </div>
         ))}
-      </ul>
+        <button type="button" onClick={addQuestion}>Add Question</button>
+        <div>
+          <button type="submit">Create Exam</button>
+        </div>
+        {message && <p>{message}</p>}
+      </form>
     </div>
   );
 };

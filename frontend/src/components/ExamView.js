@@ -1,116 +1,65 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
 
-const ExamView = () => {
-  const { examId } = useParams();
-  const [exam, setExam] = useState(null);
+const ExamList = () => {
+  const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [userAnswers, setUserAnswers] = useState({});
-  const [submitted, setSubmitted] = useState(false);
-  const [resultMessage, setResultMessage] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!examId) {
-      setError("Không có ID bài thi.");
-      setLoading(false);
-      return;
-    }
-
-    const fetchExam = async () => {
+    // Lấy dữ liệu bài kiểm tra từ API
+    const fetchExams = async () => {
       try {
-        setLoading(true);
-        setError(null);
-        const response = await axios.get(`http://localhost:5000/api/exams/${examId}`);
-        if (response.data.exam) {
-          setExam(response.data.exam);
+        const token = localStorage.getItem('token'); // Lấy token từ localStorage
+        const response = await fetch('http://localhost:5000/api/exams', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Gửi token xác thực
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          setExams(data.exams);
         } else {
-          setError("Không tìm thấy bài thi.");
+          setError(data.message);
         }
-      } catch (error) {
-        console.error('Error fetching exam:', error);
-        setError("Không thể tải bài thi, vui lòng thử lại sau.");
+      } catch (err) {
+        console.error('Error fetching exams:', err);
+        setError('Có lỗi xảy ra khi lấy bài kiểm tra.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchExam();
-  }, [examId]);
-
-  const handleAnswerChange = (questionId, answerIndex) => {
-    setUserAnswers((prev) => ({
-      ...prev,
-      [questionId]: answerIndex,
-    }));
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const resultData = {
-        examId,
-        userAnswers,
-      };
-
-      const response = await axios.post('http://localhost:5000/api/results', resultData);
-      setResultMessage(response.data.message || 'Kết quả đã được gửi!');
-      setSubmitted(true);
-    } catch (error) {
-      setResultMessage('Không thể gửi kết quả. Vui lòng thử lại sau.');
-    }
-  };
+    fetchExams();
+  }, []);
 
   if (loading) {
-    return <div>Đang tải bài thi...</div>;
+    return <div>Đang tải...</div>;
   }
 
   if (error) {
     return <div>{error}</div>;
   }
 
-  if (!exam) {
-    return <div>Không tìm thấy bài thi.</div>;
-  }
-
   return (
     <div>
-      <h1>{exam.title}</h1>
-      <h2>Câu hỏi</h2>
-      {exam.questions && exam.questions.length > 0 ? (
-        exam.questions.map((question, index) => (
-          <div key={question._id}>
-            <p>{`${index + 1}. ${question.questionText}`}</p>
-            <ul>
-              {question.answers.map((answer, idx) => (
-                <li key={idx}>
-                  <label>
-                    <input
-                      type="radio"
-                      name={question._id}
-                      value={idx}
-                      checked={userAnswers[question._id] === idx}
-                      onChange={() => handleAnswerChange(question._id, idx)}
-                      disabled={submitted}
-                    />
-                    {answer.content}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
+      <h2>Danh sách bài kiểm tra</h2>
+      {exams.length === 0 ? (
+        <p>Không có bài kiểm tra nào.</p>
       ) : (
-        <p>Không có câu hỏi nào trong bài thi.</p>
+        <ul>
+          {exams.map((exam) => (
+            <li key={exam._id}>
+              <h3>{exam.title}</h3>
+              <p>Câu hỏi: {exam.questions.length}</p>
+            </li>
+          ))}
+        </ul>
       )}
-      {!submitted && (
-        <button onClick={handleSubmit} disabled={Object.keys(userAnswers).length !== exam.questions.length}>
-          Nộp bài
-        </button>
-      )}
-      {resultMessage && <p>{resultMessage}</p>}
     </div>
   );
 };
 
-export default ExamView;
+export default ExamList;

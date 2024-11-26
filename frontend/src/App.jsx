@@ -8,11 +8,15 @@ import Header from './components/Header';
 import ExamView from './components/ExamView';
 import UpdateProfile from './components/UpdateProfile';
 import Profile from './components/Profile';
+import NotePage from './pages/NotePage';
+import NotesPage from './pages/NotesPage';
 
 const App = () => {
   return (
     <Router>
+      <NotesPage />
       <Header />
+      <NotePage />
       <div>
         <nav>
           <Link to="/login">Đăng nhập</Link> 
@@ -30,10 +34,10 @@ const App = () => {
           <Routes>
             <Route path="/create" element={<CreateExam />} />
             <Route path="/exam-list" element={<ExamList />} />
-            <Route path="/exams/:examId" element={<ExamView />} />
+            <Route path="/examsview" element={<ExamView />} />
           </Routes>
         </main>
-        
+        <ExamView />
       </div>
     </Router>
     

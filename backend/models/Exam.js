@@ -1,14 +1,20 @@
-// models/Exam.js
 const mongoose = require('mongoose');
-const Question = require('./Question');
+const Schema = mongoose.Schema;
 
-const examSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  createdAt: { type: Date, default: Date.now },
-  questions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }],
+const AnswerSchema = new Schema({
+  text: { type: String, required: true },  // Nội dung đáp án
+  isCorrect: { type: Boolean, required: true }  // Đáp án đúng hay sai
 });
 
-module.exports = mongoose.model('Exam', examSchema);
+const QuestionSchema = new Schema({
+  questionText: { type: String, required: true },  // Nội dung câu hỏi
+  answers: [AnswerSchema],  // Danh sách các đáp án
+});
+
+const ExamSchema = new Schema({
+  title: { type: String, required: true },  // Tiêu đề bài kiểm tra
+  questions: [QuestionSchema],  // Danh sách câu hỏi trong bài kiểm tra
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+}, { timestamps: true });
+
+module.exports = mongoose.model('Exam', ExamSchema);
