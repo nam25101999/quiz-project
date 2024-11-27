@@ -24,7 +24,7 @@ const NotePage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/notes', 
+        'http://localhost:5000/api/note/notes', 
         { note },
         {
           headers: {

@@ -10,6 +10,7 @@ import UpdateProfile from './components/UpdateProfile';
 import Profile from './components/Profile';
 import NotePage from './pages/NotePage';
 import NotesPage from './pages/NotesPage';
+import ExamDetails from './components/ExamDetails';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       <NotesPage />
       <Header />
       <NotePage />
+      <ExamDetails />
       <div>
         <nav>
           <Link to="/login">Đăng nhập</Link> 
@@ -37,7 +39,6 @@ const App = () => {
             <Route path="/examsview" element={<ExamView />} />
           </Routes>
         </main>
-        <ExamView />
       </div>
     </Router>
     

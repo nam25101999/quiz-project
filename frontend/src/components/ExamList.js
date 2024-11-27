@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from 'axios';  // Import axios
 
 const ExamList = () => {
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Hàm để lấy bài trắc nghiệm theo người dùng đăng nhập
-  const fetchExams = async () => {
-    try {
-      const token = localStorage.getItem('token'); // Lấy token từ localStorage
-      const response = await axios.get('http://localhost:5000/api/exams', {
-        headers: { Authorization: `Bearer ${token}` }, // Gửi token trong header
-      });
-      setExams(response.data.exams);
-      setLoading(false);
-    } catch (err) {
-      setError('Không thể tải danh sách bài trắc nghiệm.');
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchExams(); // Gọi hàm lấy bài trắc nghiệm khi component được render
+    // Lấy dữ liệu bài kiểm tra từ API
+    const fetchExams = async () => {
+      try {
+        const token = localStorage.getItem('token'); // Lấy token từ localStorage
+        const response = await axios.get('http://localhost:5000/api/exams', {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Gửi token xác thực
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.data.success) {
+          setExams(response.data.exams);
+        } else {
+          setError(response.data.message);
+        }
+      } catch (err) {
+        console.error('Error fetching exams:', err);
+        setError('Có lỗi xảy ra khi lấy bài kiểm tra.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExams();
   }, []);
 
-  // Hiển thị khi đang tải hoặc có lỗi
   if (loading) {
     return <div>Đang tải...</div>;
   }
@@ -36,35 +44,19 @@ const ExamList = () => {
 
   return (
     <div>
-      <h2>Danh Sách Bài Thi</h2>
-      <ul>
-        {exams.map((exam) => (
-          <li key={exam._id}>
-            <h3>{exam.title}</h3>
-            {exam.examUrl && (
-              <p>
-                <a href={exam.examUrl} target="_blank" rel="noopener noreferrer">
-                  Nhấn vào đây để làm bài kiểm tra
-                </a>
-              </p>
-            )}
-            <ul>
-              {exam.questions.map((question) => (
-                <li key={question._id}>
-                  <p>{question.questionText}</p>
-                  <ul>
-                    {question.answers.map((answer) => (
-                      <li key={answer._id}>
-                        {answer.content} {answer.isCorrect ? '(Đúng)' : ''}
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ul>
+      <h2>Danh sách bài kiểm tra</h2>
+      {exams.length === 0 ? (
+        <p>Không có bài kiểm tra nào.</p>
+      ) : (
+        <ul>
+          {exams.map((exam) => (
+            <li key={exam._id}>
+              <h3>{exam.title}</h3>
+              <p>Câu hỏi: {exam.questions.length}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

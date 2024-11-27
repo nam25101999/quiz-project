@@ -57,7 +57,7 @@ const CreateExam = () => {
   
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/exams/create',  // Đảm bảo đường dẫn API đúng
+        'http://localhost:5000/api/exam/create',  // Đảm bảo đường dẫn API đúng
         { title, questions },
         {
           headers: {

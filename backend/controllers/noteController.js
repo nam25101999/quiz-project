@@ -26,29 +26,31 @@ const createNote = async (req, res) => {
 // Hàm lấy ghi chú
 const getNotes = async (req, res) => {
   try {
-      const userId = req.user.id; // Lấy userId từ middleware authenticate
-      if (!userId) {
-          return res.status(400).json({ message: 'User ID không hợp lệ.' });
-      }
+    const userId = req.user.id; // Lấy userId từ middleware authenticate
 
-      // Tìm các ghi chú và lấy thêm thông tin từ User
-      const notes = await Note.find({ userId })
-          .sort({ createdAt: -1 })
-          .populate('userId', 'username'); // Lấy trường 'username' từ User
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID không hợp lệ.' });
+    }
 
-      if (!notes || notes.length === 0) {
-          return res.status(404).json({ message: 'Không có ghi chú nào.' });
-      }
+    // Sử dụng populate để lấy thông tin username từ userId
+    const notes = await Note.find({ userId })
+      .sort({ createdAt: -1 })
+      .populate('userId', 'username'); // Chỉ lấy trường 'username' từ User
 
-      res.status(200).json({ success: true, notes });
+    if (!notes || notes.length === 0) {
+      return res.status(404).json({ message: 'Không có ghi chú nào.' });
+    }
+
+    res.status(200).json({ success: true, notes });
   } catch (error) {
-      console.error('Lỗi khi lấy ghi chú:', error.message);
-      res.status(500).json({
-          success: false,
-          message: 'Đã xảy ra lỗi khi lấy ghi chú.',
-          error: error.message,
-      });
+    console.error('Lỗi khi lấy ghi chú:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Đã xảy ra lỗi khi lấy ghi chú.',
+      error: error.message,
+    });
   }
 };
+
 
 module.exports = { createNote, getNotes };

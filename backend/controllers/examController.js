@@ -40,5 +40,23 @@ const getExams = async (req, res) => {
   }
 };
 
+const getExamById = async (req, res) => {
+  try {
+    const { examId } = req.params;
 
-module.exports = { createExam, getExams };
+    // Kiểm tra xem bài kiểm tra có tồn tại không
+    const exam = await Exam.findById(examId).populate("questions.answers");
+
+    if (!exam) {
+      return res.status(404).json({ message: "Bài kiểm tra không tồn tại." });
+    }
+    res.status(404).json({ message: "Không tìm thấy bài kiểm tra" });
+    res.status(200).json({ exam });
+  } catch (error) {
+    console.error("Lỗi khi lấy bài kiểm tra:", error.message);
+    res.status(500).json({ message: "Đã xảy ra lỗi khi lấy bài kiểm tra." });
+  }
+};
+
+
+module.exports = { createExam, getExams, getExamById };

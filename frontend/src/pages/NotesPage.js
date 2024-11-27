@@ -11,12 +11,12 @@ const NotesPage = () => {
       const token = localStorage.getItem('token');
 
       try {
-        const response = await axios.get('http://localhost:5000/api/notes', {
+        const response = await axios.get('http://localhost:5000/api/note/notes', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setNotes(response.data.notes);  // Lưu các ghi chú vào state
+        setNotes(response.data.notes); // Lưu các ghi chú vào state
       } catch (err) {
         setError('Có lỗi xảy ra khi lấy ghi chú.');
       } finally {
@@ -41,24 +41,27 @@ const NotesPage = () => {
     <div>
       <h1>Danh Sách Ghi Chú</h1>
       <ul>
-        {notes.length === 0 ? (
-          <p>Không có ghi chú nào.</p>
-        ) : (
-          notes.map((note) => (
-            <li key={note._id}>
-              <p>{note.content}</p>
-              <small>
-                Người tạo: <strong>{note.user?.username || 'Không xác định'}</strong>
-              </small>
-              <br />
-              <small>Ngày tạo: {new Date(note.createdAt).toLocaleString()}</small>
-            </li>
-          ))
-        )}
-      </ul>
+  {notes.length === 0 ? (
+    <p>Không có ghi chú nào.</p>
+  ) : (
+    notes.map((note) => (
+      <li key={note._id}>
+
+        <p>{note.note}</p>
+
+        <small>
+          Người tạo: <strong>{note.userId?.username || 'Không xác định'}</strong>
+        </small>
+
+        <br />
+        <small>Ngày tạo: {new Date(note.createdAt).toLocaleString()}</small>
+      </li>
+    ))
+  )}
+</ul>
+
     </div>
   );
-  
 };
 
 export default NotesPage;
