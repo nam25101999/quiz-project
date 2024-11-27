@@ -27,12 +27,10 @@ const NotesPage = () => {
     fetchNotes();
   }, []);
 
-  // Hiển thị khi đang tải dữ liệu
   if (loading) {
     return <div>Đang tải ghi chú...</div>;
   }
 
-  // Hiển thị thông báo lỗi nếu có
   if (error) {
     return <div>{error}</div>;
   }

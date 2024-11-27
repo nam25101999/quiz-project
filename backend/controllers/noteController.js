@@ -8,10 +8,9 @@ const createNote = async (req, res) => {
         return res.status(400).json({ message: 'Ghi chú không được để trống.' });
       }
   
-      // Lưu ghi chú vào cơ sở dữ liệu
       const newNote = new Note({
         note,
-        userId: req.user.id,  // Đảm bảo rằng userId được lấy từ thông tin người dùng trong token
+        userId: req.user.id,
       });
   
       await newNote.save();
@@ -26,7 +25,7 @@ const createNote = async (req, res) => {
 // Hàm lấy ghi chú
 const getNotes = async (req, res) => {
   try {
-    const userId = req.user.id; // Lấy userId từ middleware authenticate
+    const userId = req.user.id;
 
     if (!userId) {
       return res.status(400).json({ message: 'User ID không hợp lệ.' });
@@ -35,7 +34,7 @@ const getNotes = async (req, res) => {
     // Sử dụng populate để lấy thông tin username từ userId
     const notes = await Note.find({ userId })
       .sort({ createdAt: -1 })
-      .populate('userId', 'username'); // Chỉ lấy trường 'username' từ User
+      .populate('userId', 'username');
 
     if (!notes || notes.length === 0) {
       return res.status(404).json({ message: 'Không có ghi chú nào.' });

@@ -5,7 +5,6 @@ const  { getExams } = require('../controllers/examController');
 const { getExamById } = require("../controllers/examController");
 const { protect } = require('../middleware/authMiddleware');
 
-// Route tạo bài kiểm tra (có xác thực)
 router.post('/create', protect, createExam);
 
 router.get('/get', protect, getExams );

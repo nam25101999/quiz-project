@@ -1,5 +1,5 @@
 
-const Exam = require('../models/Exam'); // Đảm bảo mô hình Exam đã được tạo đúng
+const Exam = require('../models/Exam');
 
 const createExam = async (req, res) => {
   try {
@@ -22,12 +22,12 @@ const createExam = async (req, res) => {
 
 const getExams = async (req, res) => {
   try {
-    const userId = req.user.id; // Lấy userId từ middleware authenticate
+    const userId = req.user.id;
 
     // Tìm các bài kiểm tra của người dùng
     const exams = await Exam.find({ userId })
     .sort({ createdAt: -1 })
-    .populate('userId', 'username'); // Populate để lấy thông tin người dùng nếu cần
+    .populate('userId', 'username');
 
     if (!exams || exams.length === 0) {
       return res.status(404).json({ message: 'Không có bài kiểm tra nào.' });

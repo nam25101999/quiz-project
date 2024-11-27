@@ -17,8 +17,8 @@ const ExamDetails = () => {
           },
         });
 
-        console.log(response.data); // Kiểm tra dữ liệu trả về
-        setExams(response.data.exams); // Lưu các bài kiểm tra vào state
+        console.log(response.data);
+        setExams(response.data.exams);
       } catch (err) {
         setError('Có lỗi xảy ra khi lấy bài kiểm tra.');
       } finally {

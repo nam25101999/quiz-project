@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Sử dụng useNavigate thay cho useHistory
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const CreateExam = () => {
@@ -13,7 +13,7 @@ const CreateExam = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      navigate('/login');  // Sử dụng navigate thay vì history.push
+      navigate('/login');
     }
   }, [navigate]);
 
@@ -51,13 +51,40 @@ const CreateExam = () => {
     setQuestions(updatedQuestions);
   };
 
+  const validateForm = () => {
+    if (!title) {
+      setMessage('Title is required.');
+      return false;
+    }
+    for (let i = 0; i < questions.length; i++) {
+      if (!questions[i].questionText) {
+        setMessage(`Question ${i + 1} text is required.`);
+        return false;
+      }
+      if (questions[i].answers.some(answer => !answer.text)) {
+        setMessage(`All answers for Question ${i + 1} are required.`);
+        return false;
+      }
+      const correctAnswerCount = questions[i].answers.filter(answer => answer.isCorrect).length;
+      if (correctAnswerCount !== 1) {
+        setMessage(`Exactly one correct answer is required for Question ${i + 1}.`);
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-  
+    
+    if (!validateForm()) {
+      return; // Dừng lại nếu form không hợp lệ
+    }
+
     try {
-      const response = await axios.post(
-        'http://localhost:5000/api/exam/create',  // Đảm bảo đường dẫn API đúng
+      const { data } = await axios.post(
+        'http://localhost:5000/api/exam/create',
         { title, questions },
         {
           headers: {
