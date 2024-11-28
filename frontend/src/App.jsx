@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
+import './App.css';
 import Login from './pages/Login';
-import Register from './components/Register';
+import Register from './pages/Register';
 import ExamList from './components/ExamList';
 import CreateExam from './components/CreateExam';
 import Header from './components/Header';
@@ -12,12 +13,10 @@ import NotePage from './pages/NotePage';
 import NotesPage from './pages/NotesPage';
 import ExamDetails from './components/ExamDetails';
 
-// Component bảo vệ route, chỉ cho phép truy cập khi đã đăng nhập
 const PrivateRoute = ({ element }) => {
-  // Kiểm tra xem token đã tồn tại trong localStorage chưa
+
   const isAuthenticated = localStorage.getItem('token');
 
-  // Nếu chưa đăng nhập, chuyển hướng về trang đăng nhập
   return isAuthenticated ? element : <Navigate to="/login" />;
 };
 
@@ -41,6 +40,7 @@ const App = () => {
                     <nav>
                       <Link to="/create">Tạo Bài Tập</Link>
                       <Link to="/exam-list">Danh Sách Bài Tập</Link>
+                      <Link to="/exam-details">Tạo</Link>
                     </nav>
                     <Routes>
                       <Route path="/create" element={<CreateExam />} />

@@ -3,7 +3,8 @@ const express = require('express');
 const { login, 
     register, 
     updateUser, 
-    getUserInfo 
+    getUserInfo,
+    checkUsername,
     } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware'); 
 
@@ -15,6 +16,8 @@ router.post('/register', register);
 
 router.put('/update', protect, updateUser);
 
-router.get('/user', getUserInfo);
+router.get('/user',protect, getUserInfo);
+
+router.post('/check-username', checkUsername);
 
 module.exports = router;

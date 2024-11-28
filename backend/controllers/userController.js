@@ -115,5 +115,20 @@ const getUserInfo = async (req, res) => {
   }
 };
 
+const checkUsername = async (req, res) => {
+  try {
+    const { username } = req.body;
 
-module.exports = { login, register, updateUser, getUserInfo };
+    const user = await User.findOne({ username });
+    if (user) {
+      return res.status(200).json({ exists: true });
+    }
+    return res.status(404).json({ exists: false });
+  } catch (error) {
+    console.error('Lỗi khi kiểm tra tài khoản:', error.message);
+    res.status(500).json({ message: 'Lỗi máy chủ.' });
+  }
+};
+
+
+module.exports = { login, register, updateUser, getUserInfo, checkUsername };
