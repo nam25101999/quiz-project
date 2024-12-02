@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import './App.css';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import '@fortawesome/fontawesome-free/css/all.css';
+import Login from './Auth/Login';
+import Register from './Auth/Register';
 import ExamList from './components/ExamList';
 import CreateExam from './components/CreateExam';
 import Header from './components/Header';
@@ -12,6 +13,7 @@ import Profile from './components/Profile';
 import NotePage from './pages/NotePage';
 import NotesPage from './pages/NotesPage';
 import ExamDetails from './components/ExamDetails';
+import HeaderHome from './Home/HeaderHome';
 
 const PrivateRoute = ({ element }) => {
 
@@ -35,7 +37,7 @@ const App = () => {
             element={
               <PrivateRoute element={
                 <>
-                  <Header />
+                  <HeaderHome />
                   <main>
                     <nav>
                       <Link to="/create">Tạo Bài Tập</Link>

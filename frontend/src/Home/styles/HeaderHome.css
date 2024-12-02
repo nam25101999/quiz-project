@@ -1,0 +1,73 @@
+/* HeaderHome.css */
+.header-home {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    background-color: var(--while-color);
+    height: 70px;
+  }
+  
+  /* Thanh hamburger */
+  .hamburger-menu {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .hamburger-menu i {
+    font-size: 1.8rem;
+    color: #007bff;
+  }
+  
+  /* Logo */
+  .logo_header img {
+    height: 40px;
+  }
+  
+  /* Thanh tìm kiếm */
+  .search-bar {
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-bar input {
+    padding: 5px 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .search-bar button {
+    padding: 5px 10px;
+    margin-left: 10px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .search-bar button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Menu cá nhân */
+  .user-menu {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .user-menu i {
+    font-size: 1.8rem;
+    margin-right: 8px;
+  }
+  
+  .user-menu span {
+    font-size: 1rem;
+    color: #007bff;
+  }
+  

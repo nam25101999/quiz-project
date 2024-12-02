@@ -119,9 +119,19 @@ const checkUsername = async (req, res) => {
   try {
     const { username } = req.body;
 
+    if (!username || username.trim() === '') {
+      return res.status(400).json({ message: 'Tên người dùng không được để trống.' });
+    }
+
     const user = await User.findOne({ username });
+
     if (user) {
-      return res.status(200).json({ exists: true });
+      return res.status(200).json({
+        exists: true,
+        username: user.username,
+        email: user.email,
+        avatar: user.avatar, 
+      });
     }
     return res.status(404).json({ exists: false });
   } catch (error) {
@@ -129,6 +139,7 @@ const checkUsername = async (req, res) => {
     res.status(500).json({ message: 'Lỗi máy chủ.' });
   }
 };
+
 
 
 module.exports = { login, register, updateUser, getUserInfo, checkUsername };
