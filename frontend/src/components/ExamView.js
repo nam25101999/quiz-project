@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CreateExam from './CreateExam';
+import CreateExam from '../Form/Pages/CreateExam';
 import ExamView from './ExamView';
 
 const App = () => {

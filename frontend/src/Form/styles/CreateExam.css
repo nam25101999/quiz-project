@@ -1,0 +1,120 @@
+.create_exam{
+    width: 61%;
+    margin: 0 auto;
+    background-color: var(--while-color);
+    margin-top: 40px;
+}
+
+/* Phần nhập tiêu đề */
+.title-input {
+    margin-bottom: 20px;
+  }
+  
+  .title-input input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  /* Các nút điều khiển kiểu chữ */
+  .format-buttons {
+    margin-top: 10px;
+  }
+  
+  .format-buttons button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    color: #333;
+    transition: color 0.3s;
+  }
+  
+  .format-buttons button:hover {
+    color: #ff6347; /* Màu khi hover */
+  }
+  
+  /* Khi người dùng đã chọn kiểu chữ */
+  .format-buttons button.active {
+    color: #ff6347; /* Màu khi chọn */
+  }
+
+  /* Phần nhập tiêu đề */
+.title-input {
+    margin-bottom: 20px;
+  }
+  
+  .title-input input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  /* Phần mô tả */
+  .description-input {
+    margin-bottom: 20px;
+  }
+  
+  .description-input textarea {
+    width: 100%;
+    height: 150px;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  /* Các nút điều khiển kiểu chữ */
+  .format-buttons {
+    margin-top: 10px;
+  }
+  
+  .format-buttons button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    color: #333;
+    transition: color 0.3s;
+  }
+  
+  .format-buttons button:hover {
+    color: #ff6347; /* Màu khi hover */
+  }
+  
+  /* Khi người dùng đã chọn kiểu chữ */
+  .format-buttons button.active {
+    color: #ff6347; /* Màu khi chọn */
+  }
+  
+  /* Nút xóa định dạng */
+  .format-buttons button:last-child {
+    font-size: 16px;
+    color: #888;
+    margin-left: 15px;
+  }
+  
+  .format-buttons button:last-child:hover {
+    color: #333;
+  }
+  
+  /* Danh sách có đánh số */
+  ol {
+    margin-left: 20px;
+  }
+  
+  /* Danh sách không có đánh số */
+  ul {
+    margin-left: 20px;
+  }
+  
+  

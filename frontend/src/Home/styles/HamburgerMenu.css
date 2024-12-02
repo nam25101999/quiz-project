@@ -1,0 +1,58 @@
+/* Container for the hamburger menu button */
+.hamburger-menu-container {
+    position: relative;
+  }
+  
+  /* Style for the hamburger icon */
+  .hamburger-menu {
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 100;
+  }
+  
+  /* Side menu when it's open */
+  .side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: var(--while-color);
+    color: var(--black-color);
+    padding-top: 30px;
+    transition: all 0.3s ease-in-out;
+    transform: translateX(-100%);
+    z-index: 99;
+  }
+  
+  /* If the menu is open, slide it in */
+  .hamburger-menu.open + .side-menu {
+    transform: translateX(0);
+  }
+  
+  /* Styling for the logo inside the side menu */
+  .logo_side-img {
+    width: 50px;
+    margin-left: 30px;
+    margin-bottom: 20px;
+  }
+  
+  /* Menu list inside the side menu */
+  .menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .menu-list li {
+    padding: 15px 30px;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .menu-list li:hover {
+    background-color: #555;
+  }
+  

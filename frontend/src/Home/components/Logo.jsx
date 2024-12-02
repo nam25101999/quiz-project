@@ -4,7 +4,7 @@ import '../styles/HeaderHome.css';
 const Logo = () => {
   return (
     <div className="logo_header">
-      <img src="logo.png" alt="Logo" />
+      <img src="/img/logo.png" alt="Logo" />
     </div>
   );
 };

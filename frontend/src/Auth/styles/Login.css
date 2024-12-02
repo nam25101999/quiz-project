@@ -92,7 +92,7 @@ body {
   }
   
   .login_input:focus {
-    border-color: #007bff;
+    border-color: var(--primary-color);
   }
   
   .floating_label {
@@ -111,7 +111,7 @@ body {
     top: 70px;
     left: 10px;
     font-size: 1.3rem ;
-    color: #007bff;
+    color: var(--primary-color);
     background-color: var(--black-color);
     padding: 0 5px;
     border-radius: 3px;
@@ -120,7 +120,7 @@ body {
   .text_account{
     font-size: 1.5rem;
     text-decoration: none;
-    color: #007bff;
+    color: var(--primary-color);
   }
 
   .text_account:hover{
@@ -139,7 +139,7 @@ body {
 
   .text_learnmore_a{
     text-decoration: none;
-    color: #007bff;
+    color: var(--primary-color);
     font-size: 1.5rem;
     font-weight: 300;
   }
@@ -157,13 +157,13 @@ body {
     border-radius: 25px;
     border: none;
     cursor: pointer;
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: var(--while-color);
     
   }
 
   .button_next:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-color);
     color: #fff;
     transform: scale(1.1);
 }
@@ -177,7 +177,7 @@ body {
     background-color:  transparent;
     border: none;
     cursor: pointer;
-    color:#007bff;
+    color:var(--primary-color);
   }
 
   .button_register:hover {
@@ -208,7 +208,7 @@ body {
   
   input[type="text"]:focus,
   input[type="password"]:focus {
-    border-color: #007bff;
+    border-color: var(--primary-color);
     outline: none;
   }
   
@@ -216,7 +216,7 @@ body {
   .login_button {
     width: 100%;
     padding: 0.8rem;
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     font-size: 1rem;
     border: none;
@@ -226,7 +226,7 @@ body {
   }
   
   .login_button:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-color);
   }
   
   .login_button:disabled {
@@ -307,7 +307,7 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #007bff;
+  background-color: var(--primary-color);
   margin: 0 10px 0 0;
   
 }
@@ -351,7 +351,7 @@ body {
 }
 
 .password_input:focus {
-  border-color: #007bff;
+  border-color: var(--primary-color);
 }
 
 .floating_label_password {
@@ -370,7 +370,7 @@ body {
   top: 62%;
   left: 10px;
   font-size: 1.3rem;
-  color: #007bff;
+  color: var(--primary-color);
   background-color: var(--black-color);
   padding: 0 5px;
   border-radius: 3px;
@@ -394,7 +394,7 @@ body {
 }
 
 .show_password_checkbox label:hover {
-  color: #007bff;
+  color: var(--primary-color);
 }
 
 .button_password{
@@ -405,7 +405,7 @@ body {
   background-color:  transparent;
   border: none;
   cursor: pointer;
-  color:#007bff;
+  color:var(--primary-color);
 }
 
 .button_password:hover {

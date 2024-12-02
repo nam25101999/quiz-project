@@ -1,19 +1,18 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate, Form } from 'react-router-dom';
 import './App.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import Login from './Auth/Login';
 import Register from './Auth/Register';
 import ExamList from './components/ExamList';
-import CreateExam from './components/CreateExam';
-import Header from './components/Header';
 import ExamView from './components/ExamView';
 import UpdateProfile from './components/UpdateProfile';
 import Profile from './components/Profile';
-import NotePage from './pages/NotePage';
-import NotesPage from './pages/NotesPage';
+import NotePage from './Note/pages/NotePage';
+import NotesPage from './Note/pages/NotesPage';
 import ExamDetails from './components/ExamDetails';
 import HeaderHome from './Home/HeaderHome';
+import FormHome from './Form/FormHome';
 
 const PrivateRoute = ({ element }) => {
 
@@ -40,12 +39,10 @@ const App = () => {
                   <HeaderHome />
                   <main>
                     <nav>
-                      <Link to="/create">Tạo Bài Tập</Link>
                       <Link to="/exam-list">Danh Sách Bài Tập</Link>
-                      <Link to="/exam-details">Tạo</Link>
+                      <Link to="/form-home">Tạo</Link>
                     </nav>
                     <Routes>
-                      <Route path="/create" element={<CreateExam />} />
                       <Route path="/exam-list" element={<ExamList />} />
                       <Route path="/examsview" element={<ExamView />} />
                       <Route path="/exam-details" element={<ExamDetails />} />
@@ -57,6 +54,7 @@ const App = () => {
           />
 
           {/* Các route cho phần đăng ký và cập nhật thông tin người dùng */}
+          <Route path="/form-home" element={<FormHome />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
           <Route path="/update-profile" element={<PrivateRoute element={<UpdateProfile />} />} />
