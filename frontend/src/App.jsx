@@ -11,8 +11,8 @@ import Profile from './components/Profile';
 import NotePage from './Note/pages/NotePage';
 import NotesPage from './Note/pages/NotesPage';
 import ExamDetails from './components/ExamDetails';
-import HeaderHome from './Home/HeaderHome';
 import FormHome from './Form/FormHome';
+import Home from './Home/Home';
 
 const PrivateRoute = ({ element }) => {
 
@@ -36,7 +36,7 @@ const App = () => {
             element={
               <PrivateRoute element={
                 <>
-                  <HeaderHome />
+                  <Home />
                   <main>
                     <nav>
                       <Link to="/exam-list">Danh Sách Bài Tập</Link>

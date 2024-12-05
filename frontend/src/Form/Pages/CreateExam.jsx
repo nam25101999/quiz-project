@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/CreateExam.css';
 
-const CreateExam = () => {
+
+const CreateExam = ({ title, setTitle }) => {
+  
   const [questions, setQuestions] = useState([
     { questionText: '', answers: [{ text: '', isCorrect: false }] }
   ]);
   const [message, setMessage] = useState('');
   const [description, setDescription] = useState('');
   const navigate = useNavigate();
-  const [title, setTitle] = useState('Mẫu không có tiêu đề');
   const [titleStyles, setTitleStyles] = useState({
     bold: false,
     italic: false,
@@ -22,7 +23,7 @@ const CreateExam = () => {
     underline: false,
     listType: 'none', // 'none', 'ordered', 'unordered'
   });
-
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -113,7 +114,9 @@ const CreateExam = () => {
     }
   };
 
-  const handleTitleChange = (e) => setTitle(e.target.value);
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
 
   const handleDescriptionChange = (e) => setDescription(e.target.value);
 
@@ -186,9 +189,25 @@ const CreateExam = () => {
     buttonClicked.current = false;
   };
 
+  const [showDescriptionButtons, setShowDescriptionButtons] = useState(false);
+
+  const handleDescriptionFocus = () => 
+    setShowDescriptionButtons(true);
+
+
+  const handleDescriptionBlur = () => {
+    if (!buttonClicked.current) {
+      setShowDescriptionButtons(false);
+    }
+    buttonClicked.current = false;
+  };
+
+
   const handleButtonClick = () => {
     buttonClicked.current = true;
   };
+
+
 
   return (
     <div className='create_exam'>
@@ -203,9 +222,11 @@ const CreateExam = () => {
               onBlur={handleBlur}
               required
               placeholder="Tiêu đề biểu mẫu"
-              style={titleStyle}
+              style={titleStyle}             
             />
+            
           </div>
+          
 
           {showButtons && (
             <div className="format-buttons" onMouseDown={handleButtonClick}>
@@ -232,41 +253,43 @@ const CreateExam = () => {
             <textarea
               value={description}
               onChange={handleDescriptionChange}
+              onFocus={handleDescriptionFocus}
+              onBlur={handleDescriptionBlur}
               placeholder="Nhập mô tả"
               style={descriptionStyle} // Áp dụng các kiểu chữ cho mô tả
             />
           </div>
-
       
-          <div className="format-buttons">
-            <button onClick={() => toggleDescriptionStyle('bold')}>
-              <i className="fas fa-bold"></i>
-            </button>
-            <button onClick={() => toggleDescriptionStyle('italic')}>
-              <i className="fas fa-italic"></i>
-            </button>
-            <button onClick={() => toggleDescriptionStyle('underline')}>
-              <i className="fas fa-underline"></i>
-            </button>
-            <button onClick={toggleListType}>
-              {descriptionStyles.listType === 'ordered' ? (
-                <i className="fas fa-list-ol"></i> // Danh sách có đánh số
-              ) : (
-                <i className="fas fa-list-ul"></i> // Danh sách không có đánh số
-              )}
-            </button>
-            <button onClick={resetDescriptionFormatting}>
-              <i className="fas fa-times-circle"></i> Xóa định dạng
-            </button>
-          </div>
+          {showDescriptionButtons && (
+            <div className="format-buttons">
+              <button onClick={() => toggleDescriptionStyle('bold')}>
+                <i className="fas fa-bold"></i>
+              </button>
+              <button onClick={() => toggleDescriptionStyle('italic')}>
+                <i className="fas fa-italic"></i>
+              </button>
+              <button onClick={() => toggleDescriptionStyle('underline')}>
+                <i className="fas fa-underline"></i>
+              </button>
+              <button onClick={toggleListType}>
+                {descriptionStyles.listType === 'ordered' ? (
+                  <i className="fas fa-list-ol"></i> // Danh sách có đánh số
+                ) : (
+                  <i className="fas fa-list-ul"></i> // Danh sách không có đánh số
+                )}
+              </button>
+              <button onClick={resetDescriptionFormatting}>
+                <i className="fas fa-times-circle"></i> Xóa định dạng
+              </button>
+            </div>
+          )}
         </div>
 
 
 
+        
 
-
-
-        {/* {questions.map((question, qIndex) => (
+        {questions.map((question, qIndex) => (
           <div key={qIndex}>
             <h3>Question {qIndex + 1}</h3>
             <div>
@@ -306,7 +329,7 @@ const CreateExam = () => {
         <div>
           <button type="submit">Create Exam</button>
         </div>
-        {message && <p>{message}</p>} */}
+        {message && <p>{message}</p>}
 
 
       </form>

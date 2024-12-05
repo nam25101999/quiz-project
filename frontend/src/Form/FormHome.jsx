@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import CreateExam from "./Pages/CreateExam";
 import HeaderForm from "./components/HeaderForm";
 
 const FormHome = () => {
+  const [title, setTitle] = useState("Mẫu không có tiêu đề");
+
   return (
-    <div className="form_home">
-      <HeaderForm />
-      <CreateExam />
+    <div>
+      <HeaderForm title={title} setTitle={setTitle} />
+      <CreateExam title={title} setTitle={setTitle} />
     </div>
   );
 };

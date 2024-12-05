@@ -1,7 +1,10 @@
 .user-menu {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  width: 120px;
   }
   
   .user-info {

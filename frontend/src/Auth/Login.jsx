@@ -101,7 +101,7 @@ const Login = () => {
         setMessage('Lỗi máy chủ. Vui lòng thử lại sau.');
       }
     } finally {
-      setLoading(false); // Đảm bảo trạng thái loading được tắt
+      setLoading(false);
     }
   };
 
@@ -110,7 +110,7 @@ const Login = () => {
       <form className="form_login" onSubmit={handleLogin}>
         {step === 1 && (
           <div className="form_left">
-            <div className="logo">
+            <div className="logo_login">
               <img className="logo_img" src="/img/logo.png" alt="Logo" />
             </div>
             <h2 className="login_text">Đăng nhập</h2>

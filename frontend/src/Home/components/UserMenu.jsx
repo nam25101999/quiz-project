@@ -1,33 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../axios';
-import '../styles/UserMenu.css'
+import '../styles/UserMenu.css';
 
 const UserMenu = () => {
   const [user, setUser] = useState(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Quản lý trạng thái menu mở/đóng
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const menuRef = useRef(null); // Tạo tham chiếu để theo dõi menu
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       api.get('/user', { headers: { Authorization: `Bearer ${token}` } })
-        .then(response => {
+        .then((response) => {
           setUser(response.data);
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response && err.response.status === 401) {
-            localStorage.removeItem('token'); // Xóa token nếu hết hạn
-            navigate('/login'); // Điều hướng đến trang đăng nhập
+            localStorage.removeItem('token');
+            navigate('/login');
           }
         });
     } else {
-      navigate('/login'); // Điều hướng về trang đăng nhập nếu không có token
+      navigate('/login');
     }
   }, [navigate]);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen); // Chuyển trạng thái menu khi click vào icon
+    setIsMenuOpen((prev) => !prev);
   };
 
   const handleLogout = () => {
@@ -35,10 +36,23 @@ const UserMenu = () => {
     navigate('/login');
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false); // Đóng menu nếu nhấp ra ngoài
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="user-menu">
-      <div className="user-info">
-        <i className="fa fa-user" onClick={toggleMenu}></i>
+    <div className="user-menu" ref={menuRef}>
+      <div className="user-info" onClick={toggleMenu}>
+        <i className="fa fa-user"></i>
         <span>{user ? user.username : 'Đang tải...'}</span>
       </div>
       {isMenuOpen && user && (

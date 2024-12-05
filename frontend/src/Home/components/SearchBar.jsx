@@ -31,15 +31,18 @@ const SearchBar = () => {
   };
 
   return (
-    <div>
+    <div className='search'>
       <div className="search-bar">
+        <button className='button_search' onClick={handleSearch}>
+          <i class="icon_search fa-solid fa-magnifying-glass"></i>
+        </button>
         <input
+          className='input_search'
           type="text"
           placeholder="Tìm kiếm..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-        />
-        <button onClick={handleSearch}>Tìm kiếm</button>
+        />        
       </div>
       {error && <p className="error">{error}</p>}
       <div className="search-results">

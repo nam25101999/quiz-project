@@ -21,21 +21,48 @@ const HamburgerMenu = () => {
   return (
     <div className="hamburger-menu-container">
       <div className={`hamburger-menu ${isOpen ? 'open' : ''}`} onClick={toggleMenu}>
-        <i className="fa fa-bars"></i>
+        <i className="hamburder_icon fa fa-bars"></i>
       </div>
 
       {isOpen && (
         <div className="side-menu" ref={menuRef}>
-          <div className="logo">
-            <img className="logo_side-img" src="/img/logo.png" alt="Logo" />
+          <div className="logo-menu">
+            <img className="logo_side-img" src="/img/logo-while.png" alt="Logo" />
+            <h1 className='logo_menu-text'>Biểu mẫu</h1>
           </div>
           <ul className="menu-list">
-            <li>Tài liệu</li>
-            <li>Trang tính</li>
-            <li>Trang trình bày</li>
-            <li>Biểu mẫu cài đặt</li>
-            <li>Trợ giúp</li>
-            <li>Phản hồi</li>
+            <li className='menu_li'>
+              <i class="menu_icon fa-regular fa-file"></i>
+              Tài liệu
+            </li>
+            <li className='menu_li'>
+              <i class="menu_icon fa-regular fa-file"></i>
+              Trang tính
+            </li >
+            <li className='menu_li'>
+              <i class="menu_icon fa-regular fa-file"></i>
+              Trang trình bày
+            </li>
+            <li className='menu_li'>
+              <i class="menu_icon fa-regular fa-file"></i>
+              Biểu mẫu
+            </li>
+          </ul>
+          <ul className='menu-list'>
+            <li className='menu_li'>
+              <i class="menu_icon fa-solid fa-gear"></i>
+              Cài Đặt
+            </li>
+            <li className='menu_li'>
+             <i class="menu_icon fa-solid fa-question"></i>
+              Trợ Giúp và phản hổi
+            </li>
+          </ul>
+          <ul className='menu-list'>
+            <li className='menu_li'>
+              <i class="menu_icon   fa-brands fa-google-drive"></i>
+              Drive
+            </li>
           </ul>
         </div>
       )}

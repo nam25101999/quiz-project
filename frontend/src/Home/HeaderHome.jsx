@@ -4,6 +4,7 @@ import Logo from './components/Logo';
 import SearchBar from './components/SearchBar';
 import UserMenu from './components/UserMenu';
 import './styles/HeaderHome.css'
+import MoreMenu from './components/MoreMenu';
 
 const HeaderHome = () => {
   return (
@@ -11,6 +12,7 @@ const HeaderHome = () => {
       <HamburgerMenu />
       <Logo />
       <SearchBar />
+      <MoreMenu />
       <UserMenu />
     </header>
   );
