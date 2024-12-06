@@ -1,21 +1,26 @@
 .user-menu {
   position: absolute;
-  right: 10px;
+  right: 20px;
   display: flex;
   align-items: center;
   z-index: 10;
-  width: 120px;
   }
   
   .user-info {
     display: flex;
     align-items: center;
     cursor: pointer;
+    border-radius: 50%;
   }
-  
-  .user-info i {
-    font-size: 1.5rem;
-    margin-right: 10px;
+
+  .user-info:hover{
+    background-color: var(--primary-color-rgba);
+  }
+
+  .user-icon{
+    color: #007bff;
+    font-size: 2rem;
+    padding: 10px;
   }
   
   .user-info span {
@@ -24,15 +29,24 @@
   
   .user-dropdown {
     position: absolute;
-    top: 100%;
+    display: flex;
+    top: 105%;
     right: 0;
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 10px;
-    width: 250px;
+    width: 300px;
     z-index: 10;
+  }
+
+  .user-details{
+    width: 100%;   
+  }
+
+  .text_user{
+    align-items: center;
   }
   
   .user-dropdown .user-details p {

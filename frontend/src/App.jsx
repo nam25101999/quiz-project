@@ -35,14 +35,16 @@ const App = () => {
             path="/"
             element={
               <PrivateRoute element={
-                <>
-                  <Home />
+                <>                  
                   <main>
+                    
                     <nav>
+                      <Home />             
                       <Link to="/exam-list">Danh Sách Bài Tập</Link>
                       <Link to="/form-home">Tạo</Link>
                     </nav>
                     <Routes>
+                      
                       <Route path="/exam-list" element={<ExamList />} />
                       <Route path="/examsview" element={<ExamView />} />
                       <Route path="/exam-details" element={<ExamDetails />} />

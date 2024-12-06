@@ -7,7 +7,7 @@ const UserMenu = () => {
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const menuRef = useRef(null); // Tạo tham chiếu để theo dõi menu
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -52,16 +52,21 @@ const UserMenu = () => {
   return (
     <div className="user-menu" ref={menuRef}>
       <div className="user-info" onClick={toggleMenu}>
-        <i className="fa fa-user"></i>
-        <span>{user ? user.username : 'Đang tải...'}</span>
+        <i className="user-icon fa fa-user"></i>
       </div>
       {isMenuOpen && user && (
         <div className="user-dropdown">
           <div className="user-details">
-            <p><strong>Tên:</strong> {user.username}</p>
-            <p><strong>Email:</strong> {user.email}</p>
+            <p className='text_user'>{user.email}</p>
+            <img className='user_avt' src="" alt="" />
+            <p className='text_user'><strong>Chào</strong> {user.username}</p>
+            
             <button onClick={() => navigate('/update-profile')}>Sửa thông tin</button>
             <button onClick={handleLogout} style={{ marginTop: '10px' }}>Đăng xuất</button>
+            <div className="footer_user">
+              <p >Chính sách quyền riêng tư</p>
+              <p>Điều khoản và dịch vụ</p>
+            </div>
           </div>
         </div>
       )}

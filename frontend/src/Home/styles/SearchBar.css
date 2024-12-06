@@ -3,17 +3,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 140px;
+  margin-right: 80px;
 }
 
 .search-bar {
   display: flex;
   align-items: center;
-  border: 1px solid #222;
   border-radius: 27px;
   overflow: hidden;
   width: 80%;
   background-color: #e0dfdf;
+  gap: 10px;
 }
 
 .search-bar input {
@@ -36,6 +36,12 @@
   justify-content: center;
   cursor: pointer;
   padding: 5px 0px 5px 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-bar.active {
+  background-color: #f0f8ff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .icon_search {

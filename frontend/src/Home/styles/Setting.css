@@ -1,0 +1,37 @@
+/* Container cho toàn bộ setting */
+.setting-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    max-width: 100%;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 300px;
+}
+
+/* Nút Toggle */
+.setting-container button {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Thay đổi màu khi hover */
+.setting-container button:hover {
+    background-color: #45a049;
+}
+
+/* Nút Toggle khi bấm */
+.setting-container button:active {
+    background-color: #388e3c;
+}
