@@ -1,37 +1,71 @@
-/* Container cho toàn bộ setting */
-.setting-container {
-    background-color: white;
+/* Container */
+.settings-container {
     padding: 20px;
+    background-color: #f9f9f9;
     border-radius: 8px;
+    width: 60%;
+    margin: 0 auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    max-width: 100%;
-    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    position: relative;
+  }
+  
+  .settings-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 200;
+  }
+  
+  .settings-language {
+    margin:30px 0;
+  }
+  
+  .settings-language-title {
+    font-size: 1.7rem;
+    margin-bottom: 10px;
+  }
+  
+  .settings-language-text {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 1.3rem;
+  }
+  
+  .settings-language-text:hover {
+    text-decoration: underline;
+  }
+  
+  .setting-label {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    margin-right: 300px;
-}
-
-/* Nút Toggle */
-.setting-container button {
-    background-color: #4CAF50;
-    color: white;
+    margin-bottom: 20px;
     font-size: 16px;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  /* Checkbox */
+  .setting-checkbox {
+    margin-right: 15px;
+    accent-color: var(--primary-color);
+    transform: scale(1.3);
+  }
+  
+
+  .settings-close-btn {
+    padding: 8px 32px;
+    background-color: var(--primary-color);
+    color: white;
     border: none;
-    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
-/* Thay đổi màu khi hover */
-.setting-container button:hover {
-    background-color: #45a049;
-}
-
-/* Nút Toggle khi bấm */
-.setting-container button:active {
-    background-color: #388e3c;
-}
+    float: right;
+    font-size: 1.6rem;
+  }
+  
+  .settings-close-btn:hover {
+    background-color: #0112fa;
+  }
+  

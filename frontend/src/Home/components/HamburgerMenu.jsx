@@ -4,10 +4,22 @@ import Setting from '../pages/Setting';
 
 const HamburgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(true); // State mới để điều khiển menu
   const menuRef = useRef(null);
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const [showHeroHome, setShowHeroHome] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+
+  const handleSettingsClick = () => {
+    setShowSettings(true);
+    setIsMenuOpen(false);
+  };
+
+  const handleCloseModal = () => {
+    setShowSettings(false);
+    setIsMenuOpen(true);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -20,21 +32,13 @@ const HamburgerMenu = () => {
     return () => document.removeEventListener('click', handleClickOutside); // Loại bỏ sự kiện khi component unmount
   }, []);
 
-  const [showSettings, setShowSettings] = useState(false);
-
-  const handleSettingsClick = () => {
-    setShowSettings(true); // Hiển thị modal toàn màn hình khi nhấp vào "Cài Đặt"
-  };
-
-  const handleCloseModal = () => {
-    setShowSettings(false); // Đóng modal khi nhấn ngoài hoặc nút đóng
-  };
-
   return (
     <div className="hamburger-menu-container">
-      <div className={`hamburger-menu ${isOpen ? 'open' : ''}`} onClick={toggleMenu}>
-        <i className="hamburger_icon fa fa-bars"></i>
-      </div>
+      {isMenuOpen && ( 
+        <div className={`hamburger-menu ${isOpen ? 'open' : ''}`} onClick={toggleMenu}>
+          <i className="hamburger_icon fa fa-bars"></i>
+        </div>
+      )}
 
       {isOpen && (
         <div className="side-menu" ref={menuRef}>
@@ -71,7 +75,10 @@ const HamburgerMenu = () => {
             </li>
           </ul>
           <ul className="menu-list">
-            <li className="menu_li">
+            <li
+              className="menu_li"
+              onClick={() => window.open('https://drive.google.com', '_blank')}
+            >
               <i className="menu_icon fa-brands fa-google-drive"></i>
               Drive
             </li>
@@ -81,13 +88,13 @@ const HamburgerMenu = () => {
 
       {showSettings && (
         <div>
-          <div className="overlay" onClick={handleCloseModal}></div> {/* Nền tối khi mở modal */}
+          <div className="overlay" onClick={handleCloseModal}></div>
           <div className="modal">
             <Setting
               showHeroHome={showHeroHome}
               setShowHeroHome={setShowHeroHome}
+              onClose={handleCloseModal}
             />
-            <button onClick={handleCloseModal}>Đóng</button>
           </div>
         </div>
       )}

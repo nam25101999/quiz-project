@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import HeaderHome from "./HeaderHome";
-import HomeContent from "./pages/HomeContent";
-import HeroHome from "./HeroHome";
-import Setting from "./pages/Setting";
+import HeaderHome from "./pages/HeaderHome";
+import HeroHome from "./pages/HeroHome";
+import ExamList from './pages/ExamList';
 
 const Home = () => {
     const [showHeroHome, setShowHeroHome] = useState(true);
@@ -11,8 +10,8 @@ const Home = () => {
         <div>
             <HeaderHome />
             <HeroHome showHeroHome={showHeroHome} setShowHeroHome={setShowHeroHome} />
-            <HomeContent />
-            <Setting setShowHeroHome={setShowHeroHome} />
+            <ExamList />
+
         </div>
     );
 };

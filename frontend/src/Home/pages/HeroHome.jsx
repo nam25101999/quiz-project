@@ -1,9 +1,9 @@
-import './styles/HeroHome.css';
+import '../styles/HeroHome.css';
 import React, { useState, useEffect, useRef } from 'react';
 
 const HeroHome = ({ showHeroHome, setShowHeroHome }) => {
     const items = [
-        { id: 1, image: '/img/heroHome/1.png', caption: 'Biểu mẫu trống', link: '/topic1' },
+        { id: 1, image: '/img/heroHome/1.png', caption: 'Biểu mẫu trống', link: '/form-home' },
         { id: 2, image: '/img/heroHome/2.png', caption: 'Tiêu đề trang tính', link: '/topic2' },
         { id: 3, image: '/img/heroHome/3.png', caption: 'Câu hỏi kiểm tra mức độ', link: '/topic3' },
         { id: 4, image: '/img/heroHome/4.png', caption: 'Câu hỏi trắc nghiệm', link: '/topic4' },

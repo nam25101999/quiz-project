@@ -1,5 +1,7 @@
 
 const Exam = require('../models/Exam');
+const Result = require('../models/Result');
+
 
 const createExam = async (req, res) => {
   try {
@@ -20,25 +22,27 @@ const createExam = async (req, res) => {
   }
 };
 
-const getExams = async (req, res) => {
+const getExamList = async (req, res) => {
   try {
-    const userId = req.user.id;
-
-    // Tìm các bài kiểm tra của người dùng
-    const exams = await Exam.find({ userId })
-    .sort({ createdAt: -1 })
-    .populate('userId', 'username');
-
-    if (!exams || exams.length === 0) {
-      return res.status(404).json({ message: 'Không có bài kiểm tra nào.' });
-    }
-
-    res.status(200).json({ success: true, exams });
+    const exams = await Exam.find({ userId: req.user.id }).select('title createdAt'); // Chỉ lấy trường cần thiết
+    res.status(200).json(exams);
   } catch (error) {
-    console.error('Lỗi khi lấy bài kiểm tra:', error.message);
-    res.status(500).json({ message: 'Đã xảy ra lỗi khi lấy bài kiểm tra.', error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
+
+
+const getExamDetails = async (req, res) => {
+  try {
+    const { examId } = req.params;
+    const exam = await Exam.findById(examId).populate('userId', 'username');
+    if (!exam) return res.status(404).json({ message: 'Bài thi không tồn tại.' });
+    res.status(200).json(exam);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 const getExamById = async (req, res) => {
   try {
@@ -59,4 +63,51 @@ const getExamById = async (req, res) => {
 };
 
 
-module.exports = { createExam, getExams, getExamById };
+const submitExam = async (req, res) => {
+  try {
+    const { examId, answers } = req.body;
+
+    // Lấy bài thi từ cơ sở dữ liệu
+    const exam = await Exam.findById(examId);
+    if (!exam) return res.status(404).json({ message: 'Bài thi không tồn tại.' });
+
+    let score = 0;
+    const results = [];
+
+    // Kiểm tra câu trả lời và tính điểm
+    exam.questions.forEach((question) => {
+      const userAnswer = answers.find(a => a.questionId === question._id.toString());
+      if (userAnswer) {
+        const correctAnswer = question.answers.find(a => a.isCorrect);
+        const isCorrect = correctAnswer.text === userAnswer.selectedAnswer;
+        if (isCorrect) score += 1;
+
+        results.push({
+          questionId: question._id,
+          selectedAnswer: userAnswer.selectedAnswer,
+          isCorrect,
+        });
+      }
+    });
+
+    // Lưu kết quả vào cơ sở dữ liệu
+    const result = new Result({
+      userId: req.user.id,
+      examId,
+      score,
+      answers: results,
+    });
+    await result.save();
+
+    res.status(201).json({
+      message: 'Kết quả đã được lưu thành công.',
+      resultId: result._id,
+      score,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Có lỗi xảy ra khi gửi bài thi.' });
+  }
+};
+
+module.exports = { createExam, getExamList, getExamById, getExamDetails, submitExam };

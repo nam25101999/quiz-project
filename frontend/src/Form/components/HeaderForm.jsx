@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../styles/HeaderForm.css';
+import UserMenu from '../../Home/components/UserMenu';
 
 const HeaderForm = ({ title, setTitle }) => {
   const [isFocused, setIsFocused] = useState(false);
-  const inputRef = useRef(null); // Ref cho gạch chân
-  const underlineRef = useRef(null); // Ref cho input để đo chiều rộng
+  const inputRef = useRef(null);
+  const underlineRef = useRef(null);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -64,9 +65,11 @@ const HeaderForm = ({ title, setTitle }) => {
             <i className="fas fa-cog"></i>
             <i className="fas fa-question-circle"></i>
           </div>
-          <button className="send"></button>
-          <div className="icon">Gửi</div>
-          <div className="user_Menu"></div>
+          <button className="send">Gửi</button>
+          <div className="icon_cham">
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+          </div>
+          <UserMenu />
         </div>
       </div>
 

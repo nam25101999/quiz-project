@@ -5,7 +5,7 @@ body {
     padding: 0;
     justify-content: center;
     min-height: 100vh;
-    background-color: #222222;
+    background-color:rgba(190, 149, 190, 0.2);
   }
   
   .body_login {
@@ -15,6 +15,12 @@ body {
     display: flex;
     align-items: center;
     flex-direction: column;
+  }
+
+  .login_form{
+    background-color: #222222;
+    width: 100%;
+    min-height: 100vh;
   }
 
   .form_login{
@@ -66,12 +72,6 @@ body {
     background-color: var(--black-color);
     border: var(--while-color) solid 1px;
     color: var(--while-color);
-    border-radius: 5px;
-    width: 100%;
-  }
-  
-  .login_input {
-    width: 100%;
     padding: 10px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -200,16 +200,8 @@ body {
   input[type="text"],
   input[type="password"] {
     padding: 0.8rem;   
-    font-size: 1rem;
     margin-bottom: 1rem;
     transition: border-color 0.3s;
-    font-size: 1.6rem;
-  }
-  
-  input[type="text"]:focus,
-  input[type="password"]:focus {
-    border-color: var(--primary-color);
-    outline: none;
   }
   
   /* Nút Đăng nhập */

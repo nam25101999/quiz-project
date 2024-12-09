@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/CreateExam.css';
-
+import FormMenu from '../components/FormMenu';
 
 const CreateExam = ({ title, setTitle }) => {
   
@@ -84,6 +84,8 @@ const CreateExam = ({ title, setTitle }) => {
     }
     return true;
   };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -207,14 +209,47 @@ const CreateExam = ({ title, setTitle }) => {
     buttonClicked.current = true;
   };
 
+  const handleImageUpload = (qIndex, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Logic xử lý file ảnh ở đây
+      const reader = new FileReader();
+      reader.onload = () => {
+        const imageUrl = reader.result;
+        const updatedQuestions = [...questions];
+        updatedQuestions[qIndex].imageUrl = imageUrl; // Thêm URL của ảnh vào câu hỏi
+        setQuestions(updatedQuestions);
+      };
+      reader.readAsDataURL(file); // Đọc file ảnh dưới dạng URL
+    }
+  };
 
+  const handleQuestionTypeChange = (qIndex, e) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[qIndex].questionType = e.target.value; // Cập nhật loại câu hỏi
+    setQuestions(updatedQuestions);
+  };
+
+  const removeAnswer = (qIndex, aIndex) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[qIndex].answers.splice(aIndex, 1); // Xóa 1 đáp án tại vị trí aIndex
+    setQuestions(updatedQuestions);
+  };
+
+  const removeQuestion = (index) => {
+    setQuestions((prevQuestions) => prevQuestions.filter((_, qIndex) => qIndex !== index));
+  };
+  
+  
 
   return (
     <div className='create_exam'>
       <form onSubmit={handleSubmit}>
         <div className="title_create">
-          <div className="title-input">
+          <div className="hihi"></div>
+          <div className="input-create">
             <input
+              className='title-input'
               type="text"
               value={title}
               onChange={handleTitleChange}
@@ -223,115 +258,176 @@ const CreateExam = ({ title, setTitle }) => {
               required
               placeholder="Tiêu đề biểu mẫu"
               style={titleStyle}             
-            />
-            
-          </div>
-          
-
-          {showButtons && (
-            <div className="format-buttons" onMouseDown={handleButtonClick}>
-              <button onClick={() => toggleTitleStyle('bold')}>
-                <i className="fas fa-bold"></i>
-              </button>
-              <button onClick={() => toggleTitleStyle('italic')}>
-                <i className="fas fa-italic"></i>
-              </button>
-              <button onClick={() => toggleTitleStyle('underline')}>
-                <i className="fas fa-underline"></i>
-              </button>
-              <button onClick={resetTitleFormatting}>
-                <i className="fas fa-times-circle"></i> Xóa định dạng
-              </button>
-            </div>
-          )}
-        </div>
-
-
-        <div className="describe_create">
-          <div className="description-input">
-            <label>Mô tả biểu mẫu</label>
-            <textarea
-              value={description}
-              onChange={handleDescriptionChange}
-              onFocus={handleDescriptionFocus}
-              onBlur={handleDescriptionBlur}
-              placeholder="Nhập mô tả"
-              style={descriptionStyle} // Áp dụng các kiểu chữ cho mô tả
-            />
-          </div>
-      
-          {showDescriptionButtons && (
-            <div className="format-buttons">
-              <button onClick={() => toggleDescriptionStyle('bold')}>
-                <i className="fas fa-bold"></i>
-              </button>
-              <button onClick={() => toggleDescriptionStyle('italic')}>
-                <i className="fas fa-italic"></i>
-              </button>
-              <button onClick={() => toggleDescriptionStyle('underline')}>
-                <i className="fas fa-underline"></i>
-              </button>
-              <button onClick={toggleListType}>
-                {descriptionStyles.listType === 'ordered' ? (
-                  <i className="fas fa-list-ol"></i> // Danh sách có đánh số
-                ) : (
-                  <i className="fas fa-list-ul"></i> // Danh sách không có đánh số
-                )}
-              </button>
-              <button onClick={resetDescriptionFormatting}>
-                <i className="fas fa-times-circle"></i> Xóa định dạng
-              </button>
-            </div>
-          )}
-        </div>
-
-
-
-        
-
-        {questions.map((question, qIndex) => (
-          <div key={qIndex}>
-            <h3>Question {qIndex + 1}</h3>
-            <div>
-              <label>Question Text:</label>
-              <input
-                type="text"
-                value={question.questionText}
-                onChange={(e) => handleQuestionChange(qIndex, e)}
-                required
-                placeholder="Enter question text"
-              />
-            </div>
-            {question.answers.map((answer, aIndex) => (
-              <div key={aIndex}>
-                <label>Answer {aIndex + 1}:</label>
-                <input
-                  type="text"
-                  value={answer.text}
-                  onChange={(e) => handleAnswerChange(qIndex, aIndex, e)}
-                  required
-                  placeholder="Enter answer text"
-                />
-                <label>
-                  Correct Answer:
-                  <input
-                    type="radio"
-                    checked={answer.isCorrect}
-                    onChange={() => handleCorrectAnswerChange(qIndex, aIndex)}
-                  />
-                </label>
+            />     
+              {showButtons && (
+              <div className="format-buttons" onMouseDown={handleButtonClick}>
+                <button onClick={() => toggleTitleStyle('bold')}>
+                  <i className="fas fa-bold"></i>
+                </button>
+                <button onClick={() => toggleTitleStyle('italic')}>
+                  <i className="fas fa-italic"></i>
+                </button>
+                <button onClick={() => toggleTitleStyle('underline')}>
+                  <i className="fas fa-underline"></i>
+                </button>
+                <button onClick={resetTitleFormatting}>
+                  <i class="fa-solid fa-text-slash"></i>
+                </button>
               </div>
-            ))}
-            <button type="button" onClick={() => addAnswer(qIndex)}>Add Answer</button>
-          </div>
-        ))}
-        <button type="button" onClick={addQuestion}>Add Question</button>
+              )}
+              <div className="describe_create">
+                <div className="description-input">
+                  <input
+                    className='description-textarea'
+                    value={description}
+                    onChange={handleDescriptionChange}
+                    onFocus={handleDescriptionFocus}
+                    onBlur={handleDescriptionBlur}
+                    placeholder="Mô tả biểu mẫu"
+                    style={descriptionStyle}
+                  />
+                </div>
+          
+                {showDescriptionButtons && (
+                  <div className="format-buttons">
+                    <button onClick={() => toggleDescriptionStyle('bold')}>
+                      <i className="fas fa-bold"></i>
+                    </button>
+                    <button onClick={() => toggleDescriptionStyle('italic')}>
+                      <i className="fas fa-italic"></i>
+                    </button>
+                    <button onClick={() => toggleDescriptionStyle('underline')}>
+                      <i className="fas fa-underline"></i>
+                    </button>
+                    <button onClick={toggleListType}>
+                      {descriptionStyles.listType === 'ordered' ? (
+                        <i className="fas fa-list-ol"></i>
+                      ) : (
+                        <i className="fas fa-list-ul"></i>
+                      )}
+                    </button>
+                    <button onClick={resetDescriptionFormatting}>
+                      <i class="fa-solid fa-text-slash"></i>
+                    </button>
+                  </div>
+                )}
+              </div>      
+            </div>  
+          </div>      
+
+          {questions.map((question, qIndex) => (
+            <div className='question_form'>
+            <div key={qIndex} className="question-container">
+              <div className="question_input">
+                {/* Input cho câu hỏi */}
+                <div className="question-text-container">
+                  <input 
+                    className='question-text-container-input'
+                    type="text"
+                    value={question.questionText}
+                    onChange={(e) => handleQuestionChange(qIndex, e)}
+                    required
+                    placeholder="Câu hỏi"
+                  />
+                </div>
+
+                {/* Thêm hình ảnh icon cho câu hỏi */}
+                <div className="question-image-container">
+                  <input
+                    type="file"
+                    id={`image-upload-${qIndex}`}
+                    onChange={(e) => handleImageUpload(qIndex, e)}
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                  />
+                  <label htmlFor={`image-upload-${qIndex}`}>
+                    <i className="fa-regular fa-image" title="Upload Image"></i>
+                  </label>
+                </div>
+
+                {/* Dropdown chọn loại câu hỏi */}
+                <div className="question-type-container">
+                  <select
+                    value={question.questionType}
+                    onChange={(e) => handleQuestionTypeChange(qIndex, e)}
+                  >
+                    <option value="Trắc nghiệm">Trắc nghiệm</option>
+                    <option value="true-false">True/False</option>
+                    <option value="fill-in-the-blank">Fill in the Blank</option>
+                  </select>
+                </div>
+              </div>
+              {/* Các câu trả lời */}
+              {question.answers.map((answer, aIndex) => (
+                <div className='answer' key={aIndex}>
+                  <label>
+                    <input
+                      type="radio"
+                      checked={answer.isCorrect}
+                      onChange={() => handleCorrectAnswerChange(qIndex, aIndex)}
+                    />
+                  </label>
+                  <input
+                    className='answer_input'
+                    type="text"
+                    value={answer.text}
+                    onChange={(e) => handleAnswerChange(qIndex, aIndex, e)}
+                    required
+                    placeholder={`Đáp án ${aIndex + 1}`}
+                  />
+                  <div className="question-image-container">
+                  <input
+                    type="file"
+                    id={`image-upload-${qIndex}`}
+                    onChange={(e) => handleImageUpload(qIndex, e)}
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                  />
+                  <label htmlFor={`image-upload-${qIndex}`}>
+                    <i className="fa-regular fa-image" title="Upload Image"></i>
+                  </label>
+                  </div>
+                  <button 
+                    className='button_remove'
+                    type="button" 
+                    onClick={() => removeAnswer(qIndex, aIndex)} 
+                    disabled={question.answers.length <= 1}
+                  >
+                    <i class="remove-icon fa-solid fa-xmark"></i>
+                  </button>
+
+                  
+                </div>
+              ))}
+
+              <span className='add-answerf' onClick={() => addAnswer(qIndex)}>Thêm tùy chọn</span>
+              <span className='add-answer'> hoặc </span>
+              <span className="add-answerl" onClick={() => addAnswer(qIndex)}>thêm "Câu trả lời khác"</span>
+              
+
+              <footer className='footer_question'>
+                <div className='footer-icons'>
+                  <i className="footer-icons-item fa-regular fa-copy"></i>
+                  <i class="footer-icons-item fa-solid fa-trash"
+                    onClick={() => removeQuestion(qIndex)}></i>
+                  <span>Bắt buộc</span>
+                  <div className="toggle-switch">
+                    <input type="checkbox" id="required-toggle" />
+                    <label htmlFor="required-toggle"></label>
+                  </div>
+                  <i className='footer-icons-item fas fa-ellipsis-v'></i>
+                </div>
+              </footer>
+            </div>
+            
+            </div>
+          ))}
+          
+        <FormMenu onAddQuestion={addQuestion} />
         <div>
           <button type="submit">Create Exam</button>
         </div>
         {message && <p>{message}</p>}
-
-
       </form>
     </div>
   );

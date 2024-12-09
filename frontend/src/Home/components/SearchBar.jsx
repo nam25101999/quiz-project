@@ -11,11 +11,11 @@ const SearchBar = () => {
 
 
   const handleFocus = () => {
-    setIsActive(true); // Khi nhấn vào, chuyển sang trạng thái hoạt động
+    setIsActive(true);
   };
 
   const handleBlur = () => {
-    setIsActive(false); // Khi nhấn ra ngoài, quay lại trạng thái cũ
+    setIsActive(false);
   };
   const handleSearch = async () => {
     if (!query.trim()) {
@@ -41,7 +41,7 @@ const SearchBar = () => {
 
   return (
     <div className='search'>
-      <div  
+      <div
         className={`search-bar ${isActive ? 'active' : ''}`}
         onFocus={handleFocus}
         onBlur={handleBlur}

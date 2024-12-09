@@ -38,7 +38,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 10px;
     width: 300px;
-    z-index: 10;
+    z-index: 999;
   }
 
   .user-details{
@@ -48,7 +48,6 @@
   .text_user{
     align-items: center;
   }
-  
   .user-dropdown .user-details p {
     margin: 5px 0;
   }
