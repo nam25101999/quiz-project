@@ -4,6 +4,7 @@ import api from '../axios';
 import './styles/Register.css';
 import '../styles_main/base.css';
 
+
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
