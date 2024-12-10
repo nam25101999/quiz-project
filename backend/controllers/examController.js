@@ -110,4 +110,32 @@ const submitExam = async (req, res) => {
   }
 };
 
-module.exports = { createExam, getExamList, getExamById, getExamDetails, submitExam };
+
+const deleteExam = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Kiểm tra xem bài thi có tồn tại không
+    const exam = await Exam.findById(id);
+    if (!exam) {
+      return res.status(404).json({ message: 'Bài thi không tồn tại.' });
+    }
+
+    // Kiểm tra quyền sở hữu bài thi
+    if (exam.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Bạn không có quyền xóa bài thi này.' });
+    }
+
+    // Xóa bài thi
+    await exam.deleteOne();
+
+    res.status(200).json({ message: 'Bài thi đã được xóa thành công.' });
+  } catch (error) {
+    console.error('Lỗi khi xóa bài thi:', error.message);
+    res.status(500).json({ message: 'Đã xảy ra lỗi khi xóa bài thi.' });
+  }
+};
+
+
+
+module.exports = { createExam, getExamList, getExamById, getExamDetails, submitExam, deleteExam };

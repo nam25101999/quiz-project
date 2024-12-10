@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const ExamResults = () => {
   const [results, setResults] = useState([]);
+  const [groupedResults, setGroupedResults] = useState({});
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -10,7 +11,6 @@ const ExamResults = () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          // Nếu không có token, yêu cầu người dùng đăng nhập
           window.location.href = '/login';
           return;
         }
@@ -19,7 +19,18 @@ const ExamResults = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setResults(response.data.results); // Lưu kết quả vào state
+        const resultsData = response.data.results;
+        setResults(resultsData);
+
+        // Nhóm kết quả theo examId
+        const grouped = resultsData.reduce((acc, result) => {
+          const examId = result.examId?._id || 'unknown';
+          if (!acc[examId]) acc[examId] = [];
+          acc[examId].push(result);
+          return acc;
+        }, {});
+
+        setGroupedResults(grouped);
       } catch (error) {
         setError('Có lỗi xảy ra khi tải kết quả.');
         console.error(error);
@@ -32,30 +43,34 @@ const ExamResults = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <div className="exam-results-container">
       <h1>Kết quả bài thi của bạn</h1>
-      {results.length === 0 ? (
+      {Object.keys(groupedResults).length === 0 ? (
         <p>Không có kết quả nào.</p>
       ) : (
-        results.map((result) => (
-          <div key={result._id}>
-            <h2>Bài thi: {result.examId?.title || 'Không có tiêu đề'}</h2>
-            <p>Điểm số: {result.score}</p>
-            <p>Ngày làm: {new Date(result.createdAt).toLocaleString()}</p>
+        Object.entries(groupedResults).map(([examId, results]) => (
+          <div key={examId} className="exam-result-group">
+            <h2>Bài thi: {results[0].examId?.title || 'Không có tiêu đề'}</h2>
+            {results.map((result) => (
+              <div key={result._id} className="exam-result-card">
+                <p>Điểm số: <strong>{result.score}</strong></p>
+                <p>Ngày làm: {new Date(result.createdAt).toLocaleString()}</p>
+                <p>Người trả lời: {result.userId?.username || 'Không có tên người trả lời'}</p>
 
-            {/* Hiển thị thông tin người trả lời */}
-            <p>Người trả lời: {result.userId?.username || 'Không có tên người trả lời'}</p>
-
-            <h3>Chi tiết kết quả:</h3>
-            <ul>
-              {result.answers?.map((answer, index) => (
-                <li key={index}>
-                  <p>Câu hỏi: {answer.questionId?.questionText || 'Không có câu hỏi'}</p>
-                  <p>Đáp án đã chọn: {answer.selectedAnswer}</p>
-                  <p>{answer.isCorrect ? 'Đúng' : 'Sai'}</p>
-                </li>
-              ))}
-            </ul>
+                <details className="result-details">
+                  <summary>Chi tiết kết quả</summary>
+                  <ul>
+                    {result.answers?.map((answer, index) => (
+                      <li key={index} className={`result-answer ${answer.isCorrect ? 'correct' : 'incorrect'}`}>
+                        <p><strong>Câu hỏi:</strong> {answer.questions?.questionText || 'Không có câu hỏi'}</p>
+                        <p><strong>Đáp án đã chọn:</strong> {answer.selectedAnswer}</p>
+                        <p className="answer-status">{answer.isCorrect ? 'Đúng' : 'Sai'}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </div>
+            ))}
           </div>
         ))
       )}

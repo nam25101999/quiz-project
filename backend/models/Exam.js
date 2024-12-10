@@ -10,17 +10,26 @@ const AnswerSchema = new Schema({
 // Định nghĩa schema cho câu hỏi
 const QuestionSchema = new Schema({
   questionText: { type: String, required: true },
-  answers: [AnswerSchema],  // Sử dụng AnswerSchema cho mảng câu trả lời
+  answers: [AnswerSchema],
 });
 
-// Đăng ký mô hình cho câu hỏi
 mongoose.model('Question', QuestionSchema);
 
 // Định nghĩa schema cho bài thi
 const ExamSchema = new Schema({
   title: { type: String, required: true },
-  questions: [QuestionSchema],  // Mảng câu hỏi cho bài thi
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },  // Tham chiếu đến User
+  questions: [
+    {
+      questionText: { type: String, required: true },
+      answers: [
+        {
+          text: { type: String, required: true },
+          isCorrect: { type: Boolean, required: true },
+        },
+      ],
+    },
+  ],
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Exam', ExamSchema);

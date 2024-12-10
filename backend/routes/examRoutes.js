@@ -4,6 +4,7 @@ const { createExam } = require('../controllers/examController');
 const  { getExamList } = require('../controllers/examController');
 const { getExamDetails } = require("../controllers/examController");
 const { submitExam } = require("../controllers/examController");
+const { deleteExam } = require('../controllers/examController');
 const { protect } = require('../middleware/authMiddleware');
 
 router.post('/create', protect, createExam);
@@ -13,6 +14,8 @@ router.get('/list', protect,getExamList  );
 router.get('/:examId', protect, getExamDetails);
 
 router.post('/submit', protect, submitExam);
+
+router.delete('/delete/:id', protect, deleteExam);
 
 
 
