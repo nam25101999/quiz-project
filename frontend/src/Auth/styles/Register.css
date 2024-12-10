@@ -5,10 +5,6 @@
   --primary-color: #a200ff;
   --primary-color-rgba:rgba(190, 149, 190, 0.2);
 }
-
-
-
-
 .register-container {
   width: 200%;
   max-width: 800px;
@@ -18,7 +14,6 @@
   flex-direction: column;
   align-items: center;
   padding: 0px;
-  
   
 }
 
@@ -206,30 +201,3 @@
       font-size: 12px;
   }
 }
-
-
-
-
-:root {
-  --while-color: #fff;
-  --black-color: #000;
-  --text-color: #333;
-  --primary-color: #a200ff;
-  --primary-color-rgba: rgba(128, 128, 128, 0.5);
-  --gray-color: #262424;  /* Thêm màu xám */
-}
-
-body {
-  background-color: var(--gray-color);  /* Nền trang thành màu xám */
-  color: var(--while-color);  /* Chữ màu trắng để dễ đọc trên nền tối */
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-.register-container {
-  background-color: var(--gray-color);  /* Nền màu xám cho container */
-}
-
-
-
-/* Các phần tử khác tiếp tục giữ nguyên */
