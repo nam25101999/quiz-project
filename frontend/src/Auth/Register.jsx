@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../axios';
 import './styles/Register.css';
+import '../styles_main/base.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');
