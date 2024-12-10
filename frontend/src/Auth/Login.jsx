@@ -106,7 +106,8 @@ const Login = () => {
   };
 
   return (
-    <div className="body_login">
+    <div className="login_form">
+      <div className="body_login">
       <form className="form_login" onSubmit={handleLogin}>
         {step === 1 && (
           <div className="form_left">
@@ -251,6 +252,7 @@ const Login = () => {
           </ul>
         </div>
       </div>
+    </div>
     </div>
   );
 };

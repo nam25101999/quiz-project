@@ -7,7 +7,16 @@ const SearchBar = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [error, setError] = useState('');
+  const [isActive, setIsActive] = useState(false);
 
+
+  const handleFocus = () => {
+    setIsActive(true);
+  };
+
+  const handleBlur = () => {
+    setIsActive(false);
+  };
   const handleSearch = async () => {
     if (!query.trim()) {
       setError('Vui lòng nhập nội dung tìm kiếm.');
@@ -32,7 +41,11 @@ const SearchBar = () => {
 
   return (
     <div className='search'>
-      <div className="search-bar">
+      <div
+        className={`search-bar ${isActive ? 'active' : ''}`}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        >
         <button className='button_search' onClick={handleSearch}>
           <i class="icon_search fa-solid fa-magnifying-glass"></i>
         </button>

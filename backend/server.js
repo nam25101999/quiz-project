@@ -6,6 +6,7 @@ const examRoutes = require('./routes/examRoutes');
 const userRoutes = require('./routes/userRoutes'); 
 const noteRoutes = require('./routes/noteRoutes');
 const searchRoutes = require('./routes/searchRoutes');
+const resultsRoutes = require('./routes/resultsRoutes')
 
 app.use(express.json());
 app.use(cors());
@@ -23,6 +24,8 @@ mongoose
 app.use('/api/users', userRoutes);
 
 app.use('/api/exam', examRoutes);
+
+app.use('/api/results', resultsRoutes);
 
 app.use('/api/note', noteRoutes);
 

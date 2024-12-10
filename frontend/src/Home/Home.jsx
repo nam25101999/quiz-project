@@ -1,14 +1,19 @@
-import React from "react";
-import HeaderHome from "./HeaderHome";
-import HomeContent from "./pages/HomeContent";
+import React, { useState } from 'react';
+import HeaderHome from "./pages/HeaderHome";
+import HeroHome from "./pages/HeroHome";
+import ExamList from './pages/ExamList';
 
 const Home = () => {
-    return(
+    const [showHeroHome, setShowHeroHome] = useState(true);
+
+    return (
         <div>
             <HeaderHome />
-            <HomeContent />
+            <HeroHome showHeroHome={showHeroHome} setShowHeroHome={setShowHeroHome} />
+            <ExamList />
+
         </div>
-    )
-}
+    );
+};
 
 export default Home;

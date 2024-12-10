@@ -1,8 +1,10 @@
 /* Container for the menu button */
 .more-menu {
-    position: relative;
-    display: inline-block;
-    right: 120px;
+  position: absolute;
+  right: 70px;
+  display: flex;
+  align-items: center;
+  z-index: 10;
   }
   
   /* Nút 9 chấm */
@@ -11,23 +13,27 @@
     border: none;
     font-size: 24px;
     cursor: pointer;
-    color: #333;
+    color: var(--black-color);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
   }
-  
-  /* Menu dropdown */
+  .menu-button:hover{
+    background-color: var(--primary-color-rgba);
+  }
   .menu-dropdown {
     position: absolute;
-    top: 100%;
-    left: -120px;
+    top: 105%;
+    right: 0px;
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 250px; /* Điều chỉnh chiều rộng của menu */
+    width: 300px; /* Điều chỉnh chiều rộng của menu */
     padding: 10px;
     z-index: 10;
   }
