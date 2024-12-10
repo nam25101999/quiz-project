@@ -3,8 +3,10 @@
   --black-color: #000;
   --text-color: #333;
   --primary-color: #a200ff;
-  --primary-color-rgba: rgba(128, 128, 128, 0.5);
+  --primary-color-rgba:rgba(190, 149, 190, 0.2);
 }
+
+
 
 
 .register-container {
@@ -25,9 +27,8 @@
   display: flex;
   background: var(--black-color);
   border-radius: 27px;
-  box-shadow: 0 4px 6px var(--primary-color-rgba);
   width: 200%;
-  max-width: 1000px;
+  max-width: 800px;
   margin-top: 100px;
   padding: 90px;
   box-sizing: border-box;
@@ -84,8 +85,6 @@
   font-size: 1.5rem;
   color: var(--primary-color);
   background-color: var(--black-color);
-  padding: 0 15px;
-  border: 1px solid var(--primary-color-rgba);
   border-radius: 5px;
   height: 40px;
   margin-top: 10px;
@@ -208,3 +207,29 @@
   }
 }
 
+
+
+
+:root {
+  --while-color: #fff;
+  --black-color: #000;
+  --text-color: #333;
+  --primary-color: #a200ff;
+  --primary-color-rgba: rgba(128, 128, 128, 0.5);
+  --gray-color: #262424;  /* Thêm màu xám */
+}
+
+body {
+  background-color: var(--gray-color);  /* Nền trang thành màu xám */
+  color: var(--while-color);  /* Chữ màu trắng để dễ đọc trên nền tối */
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.register-container {
+  background-color: var(--gray-color);  /* Nền màu xám cho container */
+}
+
+
+
+/* Các phần tử khác tiếp tục giữ nguyên */

@@ -208,9 +208,31 @@ const Register = () => {
     </div>
   )}
 </form>
+<div className="login_help">
+        <div class="language">
+          <select id="languageSelector" class="custom-select">
+            <option value="en">English</option>
+            <option value="vi">Tiếng Việt</option>
+            <option value="fr">Français</option>
+            <option value="es">Español</option>
+          </select>
+        </div>
+        <div className="content_help">
+          <ul className="help_list">
+            <li className="help_item">Trợ giúp</li>
+            <li className="help_item">Quyền riêng tư</li>
+            <li className="help_item">Tài Khoản</li>
+          </ul>
+        </div>
+      </div>
+
 
       {message && <p className="register-message">{message}</p>}
     </div>
+
+
+
+
   );
 };
 
