@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../axios';
+import '../styles_main/base.css'; // Importing base styles
+import './styles/profile.css'; // Importing profile-specific styles
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -17,17 +19,17 @@ const Profile = () => {
         })
         .catch(err => {
           if (err.response && err.response.status === 401) {
-            // Nếu token hết hạn hoặc không hợp lệ
+            // If token is expired or invalid
             setMessage('Token hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.');
-            localStorage.removeItem('token'); // Xóa token khỏi localStorage
-            navigate('/login'); // Điều hướng về trang đăng nhập
+            localStorage.removeItem('token'); // Remove token from localStorage
+            navigate('/login'); // Redirect to login page
           } else {
             setMessage('Lỗi khi lấy thông tin người dùng');
           }
         });
     } else {
       setMessage('Token không hợp lệ');
-      navigate('/login'); // Điều hướng về trang đăng nhập nếu không có token
+      navigate('/login'); // Redirect to login page if no token found
     }
   }, [navigate]);
 
@@ -36,26 +38,26 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Xóa token khỏi localStorage
-    navigate('/login'); // Điều hướng về trang đăng nhập
+    localStorage.removeItem('token'); // Remove token from localStorage
+    navigate('/login'); // Redirect to login page
   };
 
   return (
-    <div>
-      <h2>Thông tin người dùng</h2>
-      {message && <p>{message}</p>}
+    <div className="profile-container">
+      <h2 className="profile-header">Thông tin người dùng</h2>
+      {message && <p className="message">{message}</p>}
       {user ? (
-        <div>
+        <div className="profile-info">
           <p><strong>ID người dùng:</strong> {user._id}</p>
           <p><strong>Tên người dùng:</strong> {user.username}</p>
           <p><strong>Email:</strong> {user.email}</p>
           <p><strong>Họ và tên:</strong> {user.fullName}</p>
           <p><strong>Ngày sinh:</strong> {user.dob}</p>
           <p><strong>Giới tính:</strong> {user.gender}</p>
-          <button onClick={handleEdit}>Sửa thông tin</button>
-          <button onClick={handleLogout} style={{ marginLeft: '10px' }}>
-            Đăng xuất
-          </button>
+          <div className="profile-actions">
+            <button className="profile-button" onClick={handleEdit}>Sửa thông tin</button>
+            <button className="profile-button" onClick={handleLogout}>Đăng xuất</button>
+          </div>
         </div>
       ) : (
         <p>Đang tải thông tin người dùng...</p>
