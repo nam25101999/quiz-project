@@ -53,16 +53,17 @@ const Register = () => {
   const handleBack = () => setCurrentStep((prev) => prev - 1);
 
   return (
-    <div className="register-container">
+    <div className="register_form">
+      <div className="register-container">
      <form onSubmit={handleRegister} className="register-form">
   {currentStep === 1 && (
     <div className="register-step-container">
       <div className="register-step-left">
-      <div className="logo_login">
-              <img className="logo_img" src="/img/logo.png" alt="Logo" />
-            </div>
-            <h2 className="login_text">Đăng Ký</h2>
-      </div>
+        <div className="logo_login">
+          <img className="logo_img" src="/img/logo.png" alt="Logo" />
+          </div>
+          <h2 className="login_text">Đăng Ký</h2>
+        </div>
       <div className="register-step-right">
         <label>Họ</label>
         <input
@@ -134,7 +135,7 @@ const Register = () => {
     </div>
   )}
 
-  {currentStep === 3 && (
+    {currentStep === 3 && (
     <div className="register-step-container">
       <div className="register-step-left">
       <div className="logo_login">
@@ -225,11 +226,10 @@ const Register = () => {
           </ul>
         </div>
       </div>
-
-
       {message && <p className="register-message">{message}</p>}
     </div>
 
+    </div>
 
 
 

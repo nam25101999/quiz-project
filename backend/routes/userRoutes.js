@@ -20,4 +20,5 @@ router.get('/user',protect, getUserInfo);
 
 router.post('/check-username', checkUsername);
 
+
 module.exports = router;

@@ -1,14 +1,12 @@
-:root {
-  --while-color: #fff;
-  --black-color: #000;
-  --text-color: #333;
-  --primary-color: #a200ff;
-  --primary-color-rgba:rgba(190, 149, 190, 0.2);
+.register_form{
+  background-color: #222222;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
 }
 .register-container {
-  width: 200%;
-  max-width: 800px;
-  margin: 0 auto;
+  width: 70%;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -22,13 +20,12 @@
   display: flex;
   background: var(--black-color);
   border-radius: 27px;
-  width: 200%;
-  max-width: 800px;
-  margin-top: 100px;
-  padding: 90px;
   box-sizing: border-box;
   flex-wrap: wrap;
   justify-content: space-between;
+  width: 100%;
+  padding: 40px;
+  min-height: 60vh;
 }
 
 /* Một bước trong form */
