@@ -19,11 +19,10 @@ const HeaderForm = ({ title, setTitle }) => {
     setIsFocused(false);
   };
 
-  // Cập nhật chiều rộng và vị trí của gạch chân
   useEffect(() => {
     if (inputRef.current) {
       const textWidth = inputRef.current.scrollWidth;
-      inputRef.current.style.width = `${textWidth + 10}px`; // Thêm khoảng trống cho đẹp mắt
+      inputRef.current.style.width = `${textWidth + 10}px`;
     }
 
     if (underlineRef.current && title.trim()) {
@@ -37,7 +36,9 @@ const HeaderForm = ({ title, setTitle }) => {
     <header className="header-form">
       <div className="header_content">
         <div className="header-left">
-          <div className="logo_form-header">
+          <div className="logo_form-header"
+            onClick={() => (window.location.href = '/')}>
+            
             <img className="logo_form-header" src="/img/logo-while.png" alt="Logo" />
           </div>
           <div className={`title-header ${isFocused ? 'focused' : ''}`}>
@@ -51,7 +52,6 @@ const HeaderForm = ({ title, setTitle }) => {
               onFocus={handleFocus}
               onBlur={handleBlur}
             />
-            <span className="underline" ref={underlineRef}></span> {/* Phần tử gạch chân */}
           </div>
           <div className="star">
             <i className="fa-regular fa-star"></i>

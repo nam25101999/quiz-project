@@ -5,7 +5,12 @@ import '../styles/ExamList.css';
 
 const ExamList = () => {
   const [exams, setExams] = useState([]);
-  const [selectedOption, setSelectedOption] = useState('Option 1');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedExamId, setSelectedExamId] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(null);
+  const [editingExamId, setEditingExamId] = useState(null);
+  const [newTitle, setNewTitle] = useState('');
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +26,18 @@ const ExamList = () => {
       }
     };
     fetchExams();
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.menu-wrapper')) {
+        setMenuOpen(null);
+      }
+    };
+  
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+    
+    
   }, []);
 
   const handleExamClick = (examId) => {
@@ -31,14 +48,13 @@ const ExamList = () => {
     try {
       const confirmDelete = window.confirm('Bạn có chắc muốn xóa bài thi này?');
       if (!confirmDelete) return;
-  
+
       const token = localStorage.getItem('token');
       await axios.delete(`http://localhost:5000/api/exam/delete/${examId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-  
+
       setExams((prevExams) => prevExams.filter((exam) => exam._id !== examId));
-  
       alert('Xóa bài thi thành công!');
     } catch (error) {
       console.error(error);
@@ -46,39 +62,79 @@ const ExamList = () => {
     }
   };
 
+  const handleRenameExam = async (examId) => {
+    if (!newTitle.trim()) {
+      alert('Tên bài thi không được để trống!');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(
+        `http://localhost:5000/api/exam/${examId}/rename`,
+        { newTitle },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setExams((prevExams) =>
+        prevExams.map((exam) =>
+          exam._id === examId ? { ...exam, title: response.data.updatedExam.title } : exam
+        )
+      );
+      alert('Đổi tên thành công!');
+      setEditingExamId(null);
+      setNewTitle('');
+    } catch (error) {
+      console.error('Lỗi khi đổi tên bài thi:', error.message);
+      alert('Đã xảy ra lỗi khi đổi tên.');
+    }
+  };
+
+  const handleOpenInNewTab = (examId) => {
+    window.open(`/exam/${examId}`, '_blank');
+  };
+
+  const toggleMenu = (examId) => {
+    setMenuOpen(menuOpen === examId ? null : examId);
+  };
+
   return (
     <div>
-      {/* Header Exam List */}
-      <header className='header-exam'>
-        <div className="header-exam-list">
-          <div className="left-header">
-            <h2 className="left-header">Biểu mẫu gần đây</h2>
-          </div>
-          
-          <div className="right-header">
-            <div className="center-header">
-              <select 
-                value={selectedOption} 
-                onChange={(e) => setSelectedOption(e.target.value)}
-                className="dropdown"
-              >
-                <option value="Option 1">Lựa chọn 1</option>
-                <option value="Option 2">Lựa chọn 2</option>
-                <option value="Option 3">Lựa chọn 3</option>
-              </select>
+      <header className="header-exam">
+            <div className="header-exam-list">
+                {/* Phần trái của header */}
+                <div className="left-header">
+                    <h2>Biểu mẫu gần đây</h2>
+                </div>
+                {/* Phần phải của header */}
+                <div className="right-header">
+                    {/* Thanh lựa chọn */}
+                    <select className="exam-select">                     
+                        <option value="option1">
+                          <div className="select-option">Do tôi sở hữu</div>
+                          <span class="select-arrow">&#9662;</span>
+                        </option>
+                        <option value="option2">
+                          <div className="select-option">Do mọi người sở hữu</div>
+                          <span class="select-arrow">&#9662;</span>
+                        </option>
+                        <option value="option3">
+                          <div className="select-option">Không cho mọi người sở hữu</div>
+                          <span class="select-arrow">&#9662;</span>
+                        </option>
+                    </select>                   
+                    {/* Ba biểu tượng Font Awesome */}
+                    <div className="icons-container">
+                      <i class="icon_header-list fa-solid fa-list"></i>
+                      <i class="icon_header-list fa-solid fa-hippo"></i>
+                      <i class="icon_header-list fa-regular fa-folder"></i>
+                    </div>
+                </div>
             </div>
-            <div className="menu_exam">
-              <i className="menu_exam-icon fa fa-plus icon" />
-              <i className="menu_exam-icon fa fa-edit icon" />
-              <i className="menu_exam-icon fa fa-trash icon" />
-            </div>
-          </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Danh sách bài thi */}
       <div className="exam-list-container">
-      < div className="exam-list">
+        <div className="exam-list">
           {exams.map((exam) => (
             <div key={exam._id} className="exam-item">
               <img
@@ -86,15 +142,110 @@ const ExamList = () => {
                 alt={exam.title}
                 onClick={() => handleExamClick(exam._id)}
               />
-              <h3>{exam.title}</h3>
-              <p>Ngày tạo: {new Date(exam.createdAt).toLocaleDateString()}</p>
-              <button className="delete-btn" onClick={() => handleDeleteExam(exam._id)}>
-                Xóa
-              </button>
+                <div className="title_exam">
+                  <h3>{exam.title}</h3>
+                </div>
+              <div className="exam_date">
+                <p>Ngày tạo: {new Date(exam.createdAt).toLocaleDateString()}</p>
+
+                <div className="menu-wrapper">
+                  <i className="menu-wrapper_icon fa fa-ellipsis-v " onClick={() => toggleMenu(exam._id)} />
+                  {menuOpen === exam._id && (
+                    <div className="menu">
+                      <button
+                        className="menu-item"
+                        onClick={() => {
+                          setSelectedExamId(exam._id);
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        Xóa
+                      </button>
+                      
+                      <button
+                        className="menu-item"
+                        onClick={() => {
+                          setEditingExamId(exam._id);
+                          setNewTitle(exam.title);
+                          setIsRenameModalOpen(true);
+                          setMenuOpen(null);
+                        }}
+                      >
+                        Đổi tên
+                      </button>
+
+                      <button
+                        className="menu-item"
+                        onClick={() => {
+                          handleOpenInNewTab(exam._id);
+                          setMenuOpen(null);
+                        }}
+                      >
+                        Mở trong thẻ mới
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           ))}
         </div>
       </div>
+      {isModalOpen && (
+        <div className="overlay">
+          <div className="modal">
+            <div className="modal-content">
+              <h1>Chuyển vào thùng rác?</h1>
+              <p>"Câu hỏi trắc nghiệm trống" sẽ được chuyển vào thùng rác trong Drive và bị xóa vĩnh viễn sau 30 ngày.</p>
+              <p>Nếu tệp này được chia sẻ, cộng tác viên vẫn tạo được bản sao của tệp cho đến khi tệp bị xóa vĩnh viễn.
+              <span className='modal-content_text'>Tìm hiểu thêm</span>
+              </p>
+              <div className="modal-actions">
+                <button onClick={() => setIsModalOpen(false)}>Hủy</button>
+                <button
+                  onClick={() => {
+                    handleDeleteExam(selectedExamId);
+                    setIsModalOpen(false);
+                  }}
+                >
+                  Chuyển vào thùng rác
+                </button>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isRenameModalOpen && (
+        <div className="overlay">
+          <div className="modal">
+            <div className="modal-content_rename">
+              <h1>Đổi tên</h1>
+              <p>Vui lòng nhập tên mới cho mục này:</p>
+              <input
+                className='input_rename'
+                type="text"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                placeholder=""
+              />
+              <div className="modal-actions">
+                <button onClick={() => setIsRenameModalOpen(false)}>Hủy</button>
+                <button
+                  onClick={() => {
+                    handleRenameExam(editingExamId, newTitle); // Hàm đổi tên
+                    setIsRenameModalOpen(false); // Đóng modal
+                  }}
+                >
+                  OK
+                </button>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

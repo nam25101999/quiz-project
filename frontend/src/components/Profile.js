@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../axios';
-import '../styles_main/base.css'; // Importing base styles
-import './styles/profile.css'; // Importing profile-specific styles
+import '../styles_main/base.css';
+import './styles/profile.css';
 
 const Profile = () => {
   const [user, setUser] = useState(null);

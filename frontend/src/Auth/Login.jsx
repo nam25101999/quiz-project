@@ -63,7 +63,7 @@ const Login = () => {
 
   // Hàm xử lý đăng nhập
   const handleLogin = async (e) => {
-    e.preventDefault(); // Ngừng hành vi mặc định của form (không reload trang)
+    e.preventDefault();
 
     // Kiểm tra mật khẩu có bị trống không
     if (!password.trim()) {

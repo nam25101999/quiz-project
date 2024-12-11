@@ -1,12 +1,4 @@
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    justify-content: center;
-    min-height: 100vh;
-    background-color:rgba(190, 149, 190, 0.2);
-  }
   
   .body_login {
     width: 70%;

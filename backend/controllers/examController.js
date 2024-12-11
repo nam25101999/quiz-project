@@ -137,5 +137,71 @@ const deleteExam = async (req, res) => {
 };
 
 
+const renameExam = async (req, res) => {
+  try {
+    const { examId } = req.params;
+    const { newTitle } = req.body;
 
-module.exports = { createExam, getExamList, getExamById, getExamDetails, submitExam, deleteExam };
+    // Kiểm tra nếu tiêu đề mới không hợp lệ
+    if (!newTitle || newTitle.trim() === '') {
+      return res.status(400).json({ message: 'Tiêu đề mới không được để trống.' });
+    }
+
+    // Tìm bài thi theo ID và cập nhật tiêu đề
+    const updatedExam = await Exam.findByIdAndUpdate(
+      examId,
+      { title: newTitle },
+      { new: true } // Trả về bài thi đã cập nhật
+    );
+
+    if (!updatedExam) {
+      return res.status(404).json({ message: 'Không tìm thấy bài thi.' });
+    }
+
+    res.status(200).json({
+      message: 'Đổi tên bài thi thành công.',
+      updatedExam,
+    });
+  } catch (error) {
+    console.error('Lỗi khi đổi tên bài thi:', error.message);
+    res.status(500).json({
+      message: 'Đã xảy ra lỗi khi đổi tên bài thi.',
+      error: error.message,
+    });
+  }
+};
+
+const searchExams = async (req, res) => {
+  try {
+    const searchValue = req.query.search;
+    if (!searchValue || searchValue.trim() === '') {
+      return res.status(400).json({ message: 'Giá trị tìm kiếm không hợp lệ.' });
+    }
+
+    const exams = await Exam.find({
+      title: { $regex: searchValue, $options: 'i' },
+    });
+
+    if (!exams || exams.length === 0) {
+      return res.status(404).json({ message: 'Không tìm thấy bài kiểm tra nào.' });
+    }
+
+    res.status(200).json({ success: true, exams });
+  } catch (error) {
+    console.error('Lỗi khi tìm kiếm:', error);
+    res.status(500).json({ message: 'Đã xảy ra lỗi khi tìm kiếm.' });
+  }
+};
+
+
+
+
+module.exports = { 
+  createExam, 
+  getExamList, 
+  getExamById, 
+  getExamDetails, 
+  submitExam, 
+  deleteExam, 
+  renameExam, 
+  searchExams, };
