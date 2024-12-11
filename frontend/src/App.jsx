@@ -12,7 +12,7 @@ import NotesPage from './Note/pages/NotesPage';
 import ExamDetails from './components/ExamDetails';
 import FormHome from './Form/FormHome';
 import Home from './Home/Home';
-import TakeExam from './components/TakeExam';
+import TakeExam from './pages/TakeExam';
 import ExamResults from './components/ExamResults';
 
 const PrivateRoute = ({ element }) => {

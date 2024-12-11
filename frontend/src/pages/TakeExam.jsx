@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import styles from './styles/TakeExam.css';
 
 const TakeExam = () => {
   const { examId } = useParams();
@@ -37,7 +38,7 @@ const TakeExam = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert(`Bài thi hoàn thành! Điểm của bạn là: ${response.data.score}`);
-      navigate('/exam-results'); // Điều hướng đến trang kết quả
+      navigate('/exam-results');
     } catch (error) {
       console.error(error);
       alert('Có lỗi xảy ra khi nộp bài thi.');
@@ -47,13 +48,13 @@ const TakeExam = () => {
   if (!exam) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div className="take-exam-container">
       <h1>{exam.title}</h1>
       {exam.questions.map((q) => (
-        <div key={q._id}>
-          <p>{q.questionText}</p>
+        <div key={q._id} className="take-exam-question">
+          <p className="take-exam-question-text">{q.questionText}</p>
           {q.answers.map((a) => (
-            <label key={a.text}>
+            <label key={a.text} className="take-exam-answer">
               <input
                 type="radio"
                 name={q._id}
@@ -65,7 +66,7 @@ const TakeExam = () => {
           ))}
         </div>
       ))}
-      <button onClick={handleSubmit}>Nộp bài</button>
+      <button onClick={handleSubmit} className="take-exam-submit-button">Nộp bài</button>
     </div>
   );
 };

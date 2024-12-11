@@ -1,18 +1,25 @@
 /* Căn giữa các thành phần */
+.header-exam{
+  display: flex;
+  justify-content: center;
+}
+
 .header-exam-list {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: transparent;
+    padding: 10px;
+    background-color: transparent ;
     border-bottom: 2px solid #ddd;
-    max-width: 900px;
+    width: 70%;
   }
   
   .left-header h2 {
+    font-weight: 300;
+    color: var(--black-color);
     margin: 0;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 1.5rem;
+    padding: 10px;
   }
   
   .center-header .dropdown {
@@ -25,18 +32,57 @@
   
   .right-header {
     display: flex;
-    gap: 15px; /* Khoảng cách giữa các icon */
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
   }
   
-  .icon {
-    font-size: 20px;
+  .center-header {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .dropdown {
+    padding: 8px 12px;
+    font-size: 16px;
     color: #333;
+    background-color: transparent;
+    outline: none;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: border-color 0.3s ease;
+    margin: 0 50px;
   }
   
-  .icon:hover {
-    color: #007bff; /* Thay đổi màu sắc khi hover */
+  .dropdown:hover {
+    border-color: #007bff; /* Change border color on hover */
+  }
+  
+  .dropdown:focus {
+    border-color: #007bff; /* Border color on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Focus shadow */
+  }
+  
+  .menu_exam {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .menu_exam-icon {
+    font-size: 20px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 10px;
+  }
+  
+  .menu_exam-icon:hover {
+    color: #007bff;
+    transform: scale(1.1);
+  }
+  
+  .menu_exam-ico:active {
+    color: #0056b3;
+    transform: scale(0.9);
   }
   
   /* Phần danh sách bài thi */
@@ -44,7 +90,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
     padding: 20px;
   }
   
