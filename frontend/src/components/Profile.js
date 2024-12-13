@@ -9,29 +9,29 @@ const Profile = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
+    useEffect(() => {
+      const token = localStorage.getItem('token');
 
-    if (token) {
-      api.get('/user', { headers: { Authorization: `Bearer ${token}` } })
-        .then(response => {
-          setUser(response.data);
-        })
-        .catch(err => {
-          if (err.response && err.response.status === 401) {
-            // If token is expired or invalid
-            setMessage('Token hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.');
-            localStorage.removeItem('token'); // Remove token from localStorage
-            navigate('/login'); // Redirect to login page
-          } else {
-            setMessage('Lỗi khi lấy thông tin người dùng');
-          }
-        });
-    } else {
-      setMessage('Token không hợp lệ');
-      navigate('/login'); // Redirect to login page if no token found
-    }
-  }, [navigate]);
+      if (token) {
+        api.get('/user', { headers: { Authorization: `Bearer ${token}` } })
+          .then(response => {
+            setUser(response.data);
+          })
+          .catch(err => {
+            if (err.response && err.response.status === 401) {
+              // If token is expired or invalid
+              setMessage('Token hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.');
+              localStorage.removeItem('token');
+              navigate('/login');
+            } else {
+              setMessage('Lỗi khi lấy thông tin người dùng');
+            }
+          });
+      } else {
+        setMessage('Token không hợp lệ');
+        navigate('/login');
+      }
+    }, [navigate]);
 
   const handleEdit = () => {
     navigate('/update-profile');

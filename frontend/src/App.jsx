@@ -13,7 +13,7 @@ import ExamDetails from './components/ExamDetails';
 import FormHome from './Form/FormHome';
 import Home from './Home/Home';
 import TakeExam from './Assignment/TakeExam';
-import ExamResults from './components/ExamResults';
+import ExamResults from './Assignment/ExamResults';
 
 const PrivateRoute = ({ element }) => {
 

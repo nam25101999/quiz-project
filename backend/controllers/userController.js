@@ -2,6 +2,10 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
+
+
 
 // Đăng ký
 const register = async (req, res) => {
@@ -141,5 +145,55 @@ const checkUsername = async (req, res) => {
 };
 
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Thư mục lưu ảnh
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
+  },
+});
 
-module.exports = { login, register, updateUser, getUserInfo, checkUsername };
+const upload = multer({ storage }).single('avatar');
+
+// Hàm xử lý tải ảnh lên
+const uploadAvatar = (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(500).json({ message: 'Lỗi khi tải ảnh.', error: err.message });
+    }
+
+    try {
+      const userId = req.user.id; // ID người dùng từ middleware authenticate
+      const filePath = `uploads/${req.file.filename}`; // Đường dẫn file đã lưu
+
+      // Cập nhật avatar trong cơ sở dữ liệu
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { avatar: filePath },
+        { new: true } // Trả về thông tin user đã cập nhật
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: 'Người dùng không tồn tại.' });
+      }
+
+      res.status(200).json({ message: 'Ảnh đại diện đã được cập nhật.', avatar: user.avatar });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Đã xảy ra lỗi.', error: error.message });
+    }
+  });
+};
+
+
+
+module.exports = { 
+  login, 
+  register, 
+  updateUser, 
+  getUserInfo, 
+  checkUsername,
+  uploadAvatar,
+};

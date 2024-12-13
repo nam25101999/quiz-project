@@ -1,67 +1,86 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {jwtDecode} from 'jwt-decode'; // Sửa import đúng cách
 import './styles/TakeExam.css';
-import { jwtDecode } from 'jwt-decode';
+import '../styles_main/base.css';
 
 const TakeExam = () => {
-  const { examId } = useParams();
-  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
   const [exam, setExam] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [submissionMessage, setSubmissionMessage] = useState('');
   const [showRetryButton, setShowRetryButton] = useState(false);
+  const { examId } = useParams();
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+
 
   useEffect(() => {
-    const fetchExamDetails = async () => {
+    const fetchUserAndExam = async () => {
       const token = localStorage.getItem('token');
+
       if (!token) {
-        setErrorMessage('Bạn cần đăng nhập để tham gia bài thi.');
+        setErrorMessage('Đăng nhập vào đi em ơi =>>');
         return;
       }
 
       try {
         const decoded = jwtDecode(token);
-        try {
-          const response = await axios.get(`http://localhost:5000/api/exam/${examId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          setExam(response.data);
-        } catch (error) {
-          console.error('Không thể lấy bài thi:', error);
+        setUser(decoded);
+
+        const examResponse = await axios.get(`http://localhost:5000/api/exam/${examId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setExam(examResponse.data);
+      } catch (err) {
+        console.error(err);
+        if (err.response && err.response.status === 401) {
+          setErrorMessage('Token hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.');
+          localStorage.removeItem('token');
+        } else {
+          setErrorMessage('Không thể lấy thông tin bài thi.');
         }
-      } catch (error) {
-        console.error('Token không hợp lệ:', error.message);
-        setErrorMessage('Token không hợp lệ. Vui lòng đăng nhập lại.');
       }
     };
 
-    fetchExamDetails();
+    fetchUserAndExam();
   }, [examId, navigate]);
 
-  const handleAnswerChange = (questionId, selectedAnswer) => {
+  const handleAnswerChange = (questionId, answer) => {
     setAnswers((prevAnswers) => {
-      const updatedAnswers = prevAnswers.filter(a => a.questionId !== questionId);
-      return [...updatedAnswers, { questionId, selectedAnswer }];
+      if (answer === null) {
+        return prevAnswers.filter((ans) => ans.questionId !== questionId);
+      }
+  
+      const existingAnswerIndex = prevAnswers.findIndex((ans) => ans.questionId === questionId);
+      if (existingAnswerIndex >= 0) {
+        const updatedAnswers = [...prevAnswers];
+        updatedAnswers[existingAnswerIndex].selectedAnswer = answer;
+        return updatedAnswers;
+      }
+      return [...prevAnswers, { questionId, selectedAnswer: answer }];
     });
   };
 
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/exam/submit', { examId, answers }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.post(
+        'http://localhost:5000/api/exam/submit',
+        { examId, answers },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setSubmissionMessage(`Câu trả lời của bạn đã được ghi lại. Điểm của bạn là: ${response.data.score}`);
       setShowRetryButton(true);
-      setTimeout(() => {
-        navigate('/exam-results');  // Chuyển hướng đến trang kết quả sau khi nộp bài
-      }, 5000); // Chờ 2 giây trước khi chuyển hướng
+
     } catch (error) {
       console.error(error);
       alert('Có lỗi xảy ra khi nộp bài thi.');
     }
+    setIsResultModalOpen(true);
   };
 
   const handleRetry = () => {
@@ -70,14 +89,26 @@ const TakeExam = () => {
     setShowRetryButton(false);
     navigate(`/exam/${examId}`);
   };
+  const handleClearAnswer = (questionId) => {
+    setAnswers((prevAnswers) => prevAnswers.filter((ans) => ans.questionId !== questionId));
+  };
 
+  const handleClearAllAnswers = () => {
+    setAnswers([]);
+    setIsModalOpen(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
+  };
   if (!exam && !errorMessage) return <p>Loading...</p>;
-
+  
   return (
-    <div className="take-exam-container">
+    <div>
       {errorMessage && (
         <div className="error-message-container">
           <div className="error-message">
+            <i class="fa-solid fa-circle-exclamation"></i>
             <p>{errorMessage}</p>
             <button onClick={() => navigate('/login')} className="go-to-login-button">
               Đăng nhập
@@ -85,45 +116,132 @@ const TakeExam = () => {
           </div>
         </div>
       )}
-      
+    
+    <div className="take-exam-container">
       {!errorMessage && exam && (
         <>
-          <h1 className="exam-title">{exam.title}</h1>
-          <div className="questions-container">
-            {exam.questions.map((q) => (
-              <div key={q._id} className="take-exam-question">
-                <p className="take-exam-question-text">{q.questionText}</p>
-                <div className="answer-options">
-                  {q.answers.map((a) => (
-                    <label key={a.text} className="take-exam-answer">
-                      <input
-                        type="radio"
-                        name={q._id}
-                        value={a.text}
-                        onChange={() => handleAnswerChange(q._id, a.text)}
-                      />
-                      {a.text}
-                    </label>
-                  ))}
+          <div className="header_exam">
+            <div className="haha"></div>
+              <div className="title_takeexam">
+                <h1 className="exam-title">{exam.title}</h1>
+              </div>
+              <div className="account-container">
+                <div className="email-container">
+                  <p><strong>Email:</strong> {user?.email || 'Không rõ'}</p>
+                  <p><strong>Tên đăng nhập:</strong> {user?.username || 'Không rõ'}</p>
+                  <p><strong>Ngày sinh:</strong> {user.dob}</p>
+                  <p><strong>Họ và tên:</strong> {user.fullName}</p>
+                </div>
+                <div className="change-account-container">
+                  <button>Chuyển đổi tài khoản</button>
                 </div>
               </div>
-            ))}
-          </div>
-          <button onClick={handleSubmit} className="take-exam-submit-button">Nộp bài</button>
-
-          {submissionMessage && (
-            <div className="submission-message">
-              <p>{submissionMessage}</p>
             </div>
-          )}
-
-          {showRetryButton && (
-            <button onClick={handleRetry} className="retry-button">
-              Làm lại bài thi
+            <div className="questions-container">
+              {exam.questions.map((q) => {
+                const selectedAnswer = answers.find((ans) => ans.questionId === q._id)?.selectedAnswer; // Lấy câu trả lời đã chọn
+                return (
+                  <div key={q._id} className="take-exam-question">
+                    <p className="take-exam-question-text">{q.questionText}</p>
+                    <div className="answer-options">
+                      {q.answers.map((a) => (
+                        <label key={a.text} className="take-exam-answer">
+                          <input
+                            type="radio"
+                            name={q._id}
+                            value={a.text}
+                            checked={selectedAnswer === a.text}
+                            onChange={() =>
+                              handleAnswerChange(
+                                q._id,
+                                selectedAnswer === a.text ? null : a.text // Nếu đã chọn, bỏ chọn; nếu chưa chọn, chọn đáp án
+                              )
+                            }
+                          />
+                          {a.text}
+                        </label>
+                      ))}
+                    </div>
+                    {selectedAnswer && (
+                      <button 
+                        onClick={() => handleClearAnswer(q._id)} 
+                        className="clear-answer-button"
+                      >
+                        Xóa lựa chọn
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            
+          </>
+        )}
+      </div>
+      <button onClick={handleSubmit} className="take-exam-submit-button">
+              Nộp bài
             </button>
-          )}
-        </>
+      <div className="clear-all-container">
+        <button onClick={() => setIsModalOpen(true)} className="clear-all-button">
+          Xóa hết câu trả lời
+        </button>
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="overlay">
+          <div className="modal">
+            <div className="modal-content">
+              <h1>Xóa hết câu trả lời trong biểu mẫu?</h1>
+              <p>Thao tác này sẽ xóa câu trả lời của bạn khỏi tất cả câu hỏi. Bạn sẽ không thể hủy được thao tác này sau khi thực hiện.
+              </p>
+              <div className="modal-actions">
+                <button onClick={handleModalCancel} className="modal-cancel-button">
+                  Hủy
+                </button>
+                <button onClick={handleClearAllAnswers} className="modal-confirm-button">
+                  Xóa hết câu trả lời
+                </button>
+              </div>
+            </div>
+            </div>
+        </div>
       )}
+
+
+      {isResultModalOpen && (
+        <div className="overlay">
+          <div className="modal">
+            <div className="modal-content">
+              <h1>Kết quả bài thi</h1>
+              {submissionMessage && (
+                <div className="submission-message">
+                  <p>{submissionMessage}</p>
+                </div>
+              )}
+
+              {showRetryButton && (
+                <button 
+                  onClick={() => {
+                    handleRetry();
+                    setIsResultModalOpen(false);
+                  }} 
+                  className="retry-button">
+                  Làm lại bài thi
+                </button>
+              )}
+
+              <button
+                onClick={() => setIsResultModalOpen(false)}
+                className="close-result-modal-button"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

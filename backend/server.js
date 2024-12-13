@@ -6,9 +6,11 @@ const examRoutes = require('./routes/examRoutes');
 const userRoutes = require('./routes/userRoutes'); 
 const noteRoutes = require('./routes/noteRoutes');
 const resultsRoutes = require('./routes/resultsRoutes')
+const path = require('path');
 
 app.use(express.json());
 app.use(cors());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/', (req, res) => {
   res.send('Welcome to the server!');

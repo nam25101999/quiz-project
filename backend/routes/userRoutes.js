@@ -5,8 +5,10 @@ const { login,
     updateUser, 
     getUserInfo,
     checkUsername,
+    uploadAvatar,
     } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware'); 
+
 
 const router = express.Router();
 
@@ -20,5 +22,6 @@ router.get('/user',protect, getUserInfo);
 
 router.post('/check-username', checkUsername);
 
+router.post('/upload-avatar', protect, uploadAvatar);
 
 module.exports = router;

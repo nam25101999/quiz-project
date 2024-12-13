@@ -129,8 +129,8 @@ const Login = () => {
                 <p className="user_name ">{userInfo.username}</p>
                 <div className="my_info">
                   <img
-                    // src={userInfo.avatar || ''}
-                    // alt="User Avatar"
+                    src={userInfo.avatar ? `http://localhost:5000/${userInfo.avatar}` : '/default-avatar.png'}
+                    alt="User Avatar"
                     className="user_avatar"
                   />
                   <p className="user_email">{userInfo.email}</p>
