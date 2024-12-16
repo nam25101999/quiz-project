@@ -67,8 +67,10 @@
 }
 .account-container{
   background-color: var(--while-color);
-  margin: 0 0 10px 0;
+  margin: 0 0 20px 0;
   padding: 20px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 .questions-container {
   margin-bottom: 20px;
@@ -78,7 +80,7 @@
   margin-bottom: 20px;
   padding: 20px;
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -110,19 +112,64 @@
   transform: scale(1.5);
   margin-right: 10px;
 }
-
+.button_assignment{
+  display: flex;
+  justify-content: space-between;
+}
 .take-exam-submit-button {
-  width: 100%;
-  padding: 12px;
-  font-size: 1.2rem;
-  background-color: #4CAF50;
+  background-color: var(--primary-color);
   color: white;
+  padding: 0 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
+  font-size: 1.6rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .take-exam-submit-button:hover {
   background-color: #45a049;
+}
+
+.clear-all-container {
+  text-align: center;
+}
+
+.clear-all-button {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.clear-all-button:hover {
+  background-color: #e53935;
+}
+
+
+.footer_takeexam {
+  margin-top:20px ;
+  text-align: center;
+  font-size: 1.4rem;
+  border-top: 1px solid var(--black-color);
+}
+
+.footer_takeexam .footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer_takeexam a {
+  text-decoration: none;
+}
+
+.footer_takeexam a:hover {
+  text-decoration: underline;
+}
+
+.footer_takeexam p {
+  margin: 10px 0;
 }

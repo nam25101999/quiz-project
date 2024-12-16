@@ -16,7 +16,7 @@ body {
     padding: 0;
     justify-content: center;
     min-height: 100vh;
-    background-color:white;
+    background-color:rgba(0,0,0,0.005);
   }
 html{
     font-size: 62.5%; /* 16px */

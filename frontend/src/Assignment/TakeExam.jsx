@@ -175,17 +175,27 @@ const TakeExam = () => {
               })}
             </div>
             
-          </>
-        )}
+        </>
+      )}
+        <div className="button_assignment">
+          <button onClick={handleSubmit} className="take-exam-submit-button">
+                  Nộp bài
+                </button>
+          <div className="clear-all-container">
+            <button onClick={() => setIsModalOpen(true)} className="clear-all-button">
+              Xóa hết câu trả lời
+          </button>
+        </div>
       </div>
-      <button onClick={handleSubmit} className="take-exam-submit-button">
-              Nộp bài
-            </button>
-      <div className="clear-all-container">
-        <button onClick={() => setIsModalOpen(true)} className="clear-all-button">
-          Xóa hết câu trả lời
-        </button>
-      </div>
+      <footer class="footer_takeexam">
+        <div class="footer-content">
+          <p><strong>2N - Đưa kiến thức đến mọi người</strong></p>
+          <p>Chúng tôi cam kết bảo mật thông tin của bạn và mang đến trải nghiệm học tập tốt nhất.</p>
+          <p>&copy; 2024 2N. Tất cả quyền lợi được bảo lưu.</p>
+          <p><a href="#">Chính sách bảo mật</a> | <a href="#">Điều khoản sử dụng</a></p>
+        </div>
+      </footer>
+    </div>
 
       {/* Modal */}
       {isModalOpen && (
