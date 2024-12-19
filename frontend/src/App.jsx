@@ -14,6 +14,7 @@ import FormHome from './Form/FormHome';
 import Home from './Home/Home';
 import TakeExam from './Assignment/TakeExam';
 import ExamResults from './Assignment/ExamResults';
+import CreateExam from './Form/Pages/CreateExam';
 
 const PrivateRoute = ({ element }) => {
 
@@ -56,10 +57,11 @@ const App = () => {
 
           {/* Các route cho phần đăng ký và cập nhật thông tin người dùng */}
           <Route path="/form-home" element={<FormHome />} />
+          <Route path="/create-exam/:examId" element={<CreateExam />} />
 
           <Route path="/exam-list" element={<ExamList />}></Route>
           <Route path="/exam/:examId" element={<TakeExam />} />
-          <Route path="/exam-results" element={<ExamResults />} />
+          <Route path="/exam-results/:examId" element={<ExamResults />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
           <Route path="/update-profile" element={<PrivateRoute element={<UpdateProfile />} />} />

@@ -1,0 +1,104 @@
+.exam-results-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .exam-results-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .exam-statistics {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .exam-statistics h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .exam-statistics ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .exam-statistics li {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #555;
+  }
+  
+  .exam-result-group {
+    margin-bottom: 40px;
+  }
+  
+  .exam-result-group h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+  }
+  
+  .exam-result-card {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+  }
+  
+  .exam-result-card p {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .exam-result-card strong {
+    color: #333;
+  }
+  
+  .result-details {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+  }
+  
+  .result-details summary {
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .result-answer {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .result-answer.correct {
+    border-left: 5px solid #2ecc71;
+    background-color: #e9f7e9;
+  }
+  
+  .result-answer.incorrect {
+    border-left: 5px solid #e74c3c;
+    background-color: #f9e5e5;
+  }
+  
+  .answer-status {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .result-answer p {
+    margin: 5px 0;
+  }
+  

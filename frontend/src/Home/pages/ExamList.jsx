@@ -98,17 +98,18 @@ const ExamList = () => {
     setMenuOpen(menuOpen === examId ? null : examId);
   };
 
+  const handleViewResults = (examId) => {
+    navigate(`/exam-results/${examId}`);
+  };
+
   return (
     <div>
       <header className="header-exam">
             <div className="header-exam-list">
-                {/* Phần trái của header */}
                 <div className="left-header">
                     <h2>Biểu mẫu gần đây</h2>
                 </div>
-                {/* Phần phải của header */}
                 <div className="right-header">
-                    {/* Thanh lựa chọn */}
                     <select className="exam-select">                     
                         <option value="option1">
                           <div className="select-option">Do tôi sở hữu</div>
@@ -123,7 +124,6 @@ const ExamList = () => {
                           <span class="select-arrow">&#9662;</span>
                         </option>
                     </select>                   
-                    {/* Ba biểu tượng Font Awesome */}
                     <div className="icons-container">
                       <i class="icon_header-list fa-solid fa-list"></i>
                       <i class="icon_header-list fa-solid fa-hippo"></i>
@@ -147,7 +147,12 @@ const ExamList = () => {
                 </div>
               <div className="exam_date">
                 <p>Ngày tạo: {new Date(exam.createdAt).toLocaleDateString()}</p>
-
+                <button
+                  className="view-results-button"
+                  onClick={() => handleViewResults(exam._id)}
+                >
+                  Xem kết quả
+                </button>
                 <div className="menu-wrapper">
                   <i className="menu-wrapper_icon fa fa-ellipsis-v " onClick={() => toggleMenu(exam._id)} />
                   {menuOpen === exam._id && (

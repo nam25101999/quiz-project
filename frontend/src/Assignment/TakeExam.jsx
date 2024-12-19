@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode'; // Sửa import đúng cách
+import {jwtDecode} from 'jwt-decode';
 import './styles/TakeExam.css';
 import '../styles_main/base.css';
 
